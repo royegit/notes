@@ -1,0 +1,202 @@
+<?php require APP_ROOT.'public/header.php';?>
+
+<script src="<?php echo APP_ROOT;?>js/validate/jquery.validate.min.js"></script>
+<script src="<?php echo APP_ROOT;?>js/validate/form-validate-demo.min.js"></script>
+<link href="<?php echo APP_ROOT;?>css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+<link href="<?php echo APP_ROOT;?>css/style.min862f.css?v=4.1.0" rel="stylesheet">
+<div class="aui-tab aui-border-b" id="tab">
+    <div class="aui-tab-item aui-active" style="color:#43BA82"> 帐号登录</div>
+    <div class="aui-tab-item" style="color:#43BA82">快捷登录注册</div>
+</div>
+<div class="aui-padded-0 " id="tab1-con" style="margin-bottom:10rem">
+    <div id="tab1-con1">
+        <form id="signupForm" action="./shuashou.php?m=member&a=login" method="post" >
+        <div class="aui-content aui-margin-b-15">
+            <ul class="aui-list aui-form-list">
+                <li class="aui-list-header">&nbsp;</li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner form-group">
+                        <div class="aui-list-item-label-icon">
+                            <i class="aui-iconfont aui-icon-mobile"></i>
+                        </div>
+                        <div class="aui-list-item-input ">
+                            <input type="text" name="mobile" placeholder="手机号"  >
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner form-group">
+                        <div class="aui-list-item-label-icon">
+                            <i class="aui-iconfont aui-icon-lock"></i>
+                        </div>
+                        <div class="aui-list-item-input">
+                            <input type="password" class="form-control" name="password" placeholder="密码" >
+                        </div>
+                        <div class="aui-list-item-label-icon" style="color:#43BA82">
+                            忘记密码
+                            <i class="aui-iconfont " id="password" style="margin-right:1.5rem;"></i>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="aui-bar aui-bar-btn"  style="width:95%; margin:1.5rem auto;">
+                <div class="aui-btn aui-btn-block text-white" id="sub"  style="background:#43BA82;cursor:pointer;" >登录</div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <div class="aui-hide" id="tab1-con2">
+        <form id="signupForm2" action="./shuashou.php?m=member&a=login" method="post" >
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-header">&nbsp;</li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner  form-group">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-mobile"></i>
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" placeholder="手机号" name="mobile" id="mobile2"  />
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner form-group">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont aui-icon-lock"></i>
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="password" placeholder="密码" >
+                    </div>
+                    <div class="aui-list-item-label-icon" style="color:#43BA82">
+                        <i class="aui-iconfont" style="margin-right:1.5rem;"></i>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner form-group">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont">
+                            <img style="width:1.2rem;" src="<?php echo APP_ROOT;?>images/ico_code.svg" />
+                        </i>
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" id="verifcode" name="verifcode" placeholder="验证码">
+                    </div>
+                    <div class="aui-list-item-label-icon" style="margin-right:0.5rem;padding-right:1.9rem;">
+                        <div class="aui-btn aui-btn-outlined" id="getCode" style="border:1px solid #43BA82;color:#43BA82;border-radius: 0.9rem;">获取验证码</div>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label-icon">
+                        <i class="aui-iconfont "></i>
+                        <img style="width:0.83rem;" src="<?php echo APP_ROOT;?>images/ico_Invite.svg" />
+                        </i>
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" placeholder="邀请码（选填）">
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="aui-bar aui-bar-btn" style="width:95%; margin:1.5rem auto;">
+            <div class="aui-btn aui-btn-block text-white" style="background:#43BA82;" >注册</div>
+        </div>
+      </form>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        $("#sub").on('click',function(){
+            $("#signupForm").submit();
+        });
+        $("#sub2").on('click',function(){
+            $("#signupForm2").submit();
+        });
+
+        apiready = function() {
+            api.parseTapmode();
+        }
+        var tab = new auiTab({
+            element: document.getElementById("tab"),
+
+        }, function(ret) {
+            if (ret) {
+                //定义获取对象的所有兄弟节点的函数，
+                function siblings(elm) {
+                    var a = [];
+                    var p = elm.parentNode.children;
+                    for (var i = 0, pl = p.length; i < pl; i++) {
+                        if (p[i] !== elm) a.push(p[i]);
+                    }
+                    return a;
+                }
+                var index = ret.index;
+                var activeC = document.getElementById("tab1-con" + index);
+                activeC.className = "";
+                for (var i = 0; i < siblings(activeC).length; i++) {
+                    siblings(activeC)[i].className = "aui-hide";
+                }
+            }
+        });
+
+
+
+
+        var wait=60;
+        function time() {
+            $("#error_verifcode").html("");
+            if (wait == 0) {
+                $("#getCode").attr("disabled",false);
+                $("#getCode").html("免费获取验证码");
+                wait = 60;
+            } else {
+                $("#getCode").attr("disabled",true);
+                $("#getCode").html("重新发送(" + wait + ")");
+                wait--;
+                setTimeout(function() {
+                        time()
+                    },
+                    1000)
+            }
+        }
+
+        $("#getCode").click(function(){
+            var mobile = $("#mobile2").val();
+
+            if(mobile == ""){
+                $("#mobile-error1").remove();
+                $("#mobile2").after('<span id="mobile-error1" style=\'color:#a94442;\' class="help-block m-b-none has-error"><i class="fa fa-times-circle"></i> 请输入手机号</span>');
+                return;
+            }
+
+            var myreg = /^1[3|4|5|7|8|9|6|][0-9]{9}$/;
+            if(!myreg.test(mobile))
+            {
+                $("#mobile-error1").remove();
+                $("#mobile2").after('<span id="mobile-error1" style=\'color:#a94442;\' class="help-block m-b-none has-error"><i class="fa fa-times-circle"></i> 请输入正确的手机号码</span>');
+                return;
+            }
+            $("#mobile-error1").remove();
+            $("#mobile2").after('<span id="mobile-error1" style=\'color: #43BA82;\' class="help-block m-b-none has-error"><i class=" fa fa-check-circle"></i> 正在发送。。。</span>');
+
+            $.post("index.php?m=sms&a=send_sms&",{tel:mobile,type:3},function(data){
+                var data = JSON.parse(data);
+                if(data.code == 200){
+                    //  promptshow('短信已成功发送！');
+                    // $("#error_mobile").html("<img src=\"public/images/taskok.gif\"/>");
+                    time();
+                }
+                else
+                {
+                    $("#mobile-error1").remove();
+                }
+            });
+        });
+    </script>
+
+
+
+
+<?php require APP_ROOT.'public/foot.php';?>

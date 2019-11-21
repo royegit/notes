@@ -1,0 +1,83 @@
+
+<html>
+<head>
+
+<style type="text/css">
+
+/* 去掉页眉和页脚 最好加上这个。不然在打印页面的头部会有一串地址影响美观 */
+   @page { margin: 0; }
+</style>
+</head>
+<body>
+<!--startprint-->
+	<div class="table" id="Pay" style="display:block">
+        <div class="top">
+            	付款申请表
+        </div>
+        <table border="0" cellspacing="0">
+          <tr>
+			<td class="gray" colspan="4">应付款情况说明：阿瑟东顶顶顶顶顶顶</td>
+		  </tr>
+		  <tr>
+		  	<td>合同名称</td>
+		  	<td>法律合同</td>
+		  	<td>合同编号</td>
+		  	<td>MS12478384593452345476876</td>
+		  </tr>
+          <tr>
+		  	<td>合同总金额（元）</td>
+		  	<td>100,000,000元</td>
+		  	<td>合同签署时间</td>
+		  	<td>2017-12-23</td>
+		  </tr>
+		  <tr>
+		  	<td>本次应付款金额</td>
+		  	<td>100,000,000元</td>
+		  	<td>本次最晚付款时间</td>
+		  	<td>2017-12-23</td>
+		  </tr>
+		  <tr>
+		  	<td>申请人</td>
+		  	<td>张三</td>
+		  	<td>申请日期</td>
+		  	<td>2017-12-23</td>
+		  </tr>
+          <tr>
+          	<td class="gray">审批人职位</td>
+          	<td class="gray">审批人</td>
+          	<td class="gray">审批时间</td>
+          	<td class="gray">审批意见</td>
+          </tr>
+          <c:forEach items="${historyList}" var="hlist">
+			<tr>
+				<td>苦逼的程序员</td>
+				<td>甄霸道</td>
+				<td>2017-12-23</td>
+				<td>哈哈哈哈哈哈哈哈哈哈</td>
+			</tr>
+		</c:forEach>
+        </table>
+	    <div id="img">
+	    	<img alt="" src="${ctxStatic}/images/oa/mark.png">
+	    </div>
+    </div>
+<!--endprint--> 
+	<button onclick="dayin()">打 印</button>
+	
+	
+	<script type="text/javascript">
+
+$(document).ready(function() {
+	dayin();
+});
+function dayin(){
+	bdhtml=window.document.body.innerHTML;//获取当前页的html代码  
+	sprnstr="<!--startprint-->";//设置打印开始区域  
+	eprnstr="<!--endprint-->";//设置打印结束区域  
+	prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18); //从开始代码向后取html  
+	prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));//从结束代码向前取html 
+	window.document.body.innerHTML=prnhtml;  
+	window.print();  
+}
+</script>
+</body>

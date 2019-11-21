@@ -1,0 +1,2 @@
+array_unique()   去除数组中重复的元素值
+file_put_contents("test.txt", "This is something.");  //把字符串写入txt文本文件

@@ -1,0 +1,74 @@
+IFNULL(expr1,expr2)   //expr1 不是NULL 则返回expr1 否则 返回 expr2
+
+如果expr1不是NULL，IFNULL()返回expr1，否则它返回expr2。IFNULL()返回一个数字或字符串值
+
+具体用法如：现有学生表（tbl_student）和分数表（score）,查询学生表的所有字段和学生相对于的英语成绩（english_score）sql如下：
+
+select stu.*,IFNULL(score.english_score,0) from tbl_student stu,tbl_score score where 1=1 and stu.stu_id=score.stu_id
+
+以上sql中，如果score表中的english_score有值，则IFNULL(score.english_score,0)就显示english_score，否则，显示0
+
+
+
+select date_format(now(),'%Y年%m月%d日');   	  			//数据库获取当前时间 格式为 2019年01月10日
+FROM_UNIXTIME(createtime,'%Y年%m月%d日')          			//mysql 时间戳转换为年月日格式为( 2019年01月10日)
+select max(score) from 4a;					 				//获取最大值 max 
+select sum(price) from 4a;									//sum 计算改字段的总金额
+select subdate(curdate(),date_format(curdate(),'%w')-7)  	//查询这周日的数据
+
+
+
+create view v_t1 as select * from t1 where id >2 and id <4;  //创建一个 v_te 的视图函数 sql语句视图 查找 表 t1 id 大于2小于4的数据
+drop view v_t1  //删除视图
+
+mysql> show tables;  //查看表里是否有视图
++-----------------+
+| Tables_in_test  |
++-----------------+
+| t1			  |
+| v_t1			  | #表v_t1视图
++-----------------+
+2 rows in set (0.00 sec)
+
+mysql> select *from v_t1;  //调用视图
+
++----+---------+
+| id |  name   |
++----+---------+
+| 3  | user3   |
++----+---------+
+1 row set (0.00 sec)
+
+create table t2 like t1 ;复制表t1并命名为t2 
+
+insert into t2 select *from t1 ; 复制表t1的数据到表t2;
+
+rename table t2 to t1 ;把表t2改成表t1
+
+
+select name from t1 into autfile "/tmp/test.txt";  把t1表的name字段导入到test.txt文件中
+truncate t1 ; 情空表 t1;
+load data infile "/tmp/test.txt" into table t1(name);  //把test.txt的数据导入到 表t1的name字段
+
+
+select t1.* from t1,t2 where t1.id=t2.uid  //代替嵌套查询之查询的select 表查询 （嵌套查询的优化语句，好处在于这样的语句能使用到索引）
+select t1.* from t1 left join t2 on t1.id=t2.uid where t2.uid is not null;  //join 也可以代替子查询 查出t2表不为null的数据
+
+
+select date_format(now(),'%Y年%m月%d日');   	  //数据库获取当前时间 格式为 2019年01月10日
+FROM_UNIXTIME(createtime,'%Y年%m月%d日')          //mysql 时间戳转换为年月日格式为( 2019年01月10日)
+select max(score) from 4a;						  //获取最大值
+
+
+
+
+
+
+
+
+
+
+
+
+
+

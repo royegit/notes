@@ -1,0 +1,187 @@
+ $(this).find("#issetbuyerattr1").is(':checked');   	  //判断是否选择状态
+ 
+ $(input[id=issetbuyerattr1_hourputnum0]:eq(2));    	  //选择所有input标签内id=issetbuyerattr1_hourputnum0 的第2个元素
+ 
+
+ $("div[data-link-field='startdate'] input:first-child")  //选择所有div 有data-link-field属性等于startdate 的input的第一个子元素
+
+$("select[name=tasksubtype]").find('option[value="2"]').attr("selected",true);   //jquery 控制 select 设置value=2的为选择的状态
+
+$("input[name='limitsex'][value='2']").prop('checked',true);   			//选择所有name=limitsex并且value='2'的元素
+
+$(".taskTcodeTab ").find('a').attr('href') 			//获取class 等于taskTcodeTab 下在所有a标签元素的href 值
+$(".taskTcodeTab ").children().attr('href')  		//获取taskTcodeTab 下的所有子元素
+$(".taskTcodeTab ").children("a:eq(0)").attr('href')//获取class 等于taskTcodeTab下所有第0个a元素
+$(".taskTcodeTab ").find("a:eq(0)").attr('href')  	//获取class 等于taskTcodeTab下所有第0个a元素
+$(".taskTcodeTab > a:eq(0)").attr('href') 			//获取class 等于taskTcodeTab下所有第0个a元素
+$("#all2 input[name='keyword_flow[]']:eq(1)") 		//获取id为all2下的所有input的name等于keyword_flow[]的所有元素，包括子元素的子元素
+
+//多条件选择
+$('#td1,#td2,p').css('color','red');
+
+//选择内容不是id=td1
+$('tbody td:not(#td1)').css('color','green');
+
+//选择条件1 attr1="a1" 和 条件2 attr2="a2"的元素
+$('[attr1="a1"][attr2="a2"]').css('color','blue');
+
+//选择条件1 attr1="a1" 或者 条件2 attr2="a2"的元素
+$('[attr1="a1"],[attr2="a2"]').css('color','yellow');
+
+//选择不满足 条件1 attr1="a1" 的元素
+$('tbody td[attr1!="a1"]').css('color','purple');
+ 
+//选择不满足 条件1 attr1="a1" 或 条件2 attr2="a2"的元素
+$('tbody td:not([attr1="a1"],[attr2="a2"])').css('color','orange');
+$('tbody td[attr1!="a1"][attr2!="a2"]').css('color','black');
+
+//选择不满足 条件1 attr1="a1" 和 条件2 attr2="a2"的元素
+$('tbody td:not([attr1="a1"][attr2="a2"])').css('color','#ff7700');
+$('tbody td[attr1!="a1"],tbody td[attr2!="a2"]').css('color','black');
+
+//选择tboy中td标签attr1!="a1" 和 所有标签中attr2!="a2"， 即除了<td id="td3" attr1="a1" attr2="a2">3</td>的其它所有标签元素
+$('tbody td[attr1!="a1"],[attr2!="a2"]').css('color','grey');
+
+
+子元素过滤选择器： 
+ 
+$("ul li:nth-child(2)"),$("ul li:nth-child(odd)"),$("ul li:nth-child(3n + 1)") 
+ 
+$("div span:first-child")          返回所有的div元素的第一个子节点的数组 
+$("div span:last-child")           返回所有的div元素的最后一个节点的数组 
+$("div button:only-child")         返回所有的div中只有唯一一个子节点的所有子节点的数组 
+
+
+
+可视化过滤选择器： 
+ 
+$("div:hidden")         选择所有的被hidden的div元素 
+$("div:visible")        选择所有的可视化的div元素 
+
+内容过滤选择器： 
+ 
+$("div:contains('John')") 选择所有div中含有John文本的元素 
+$("td:empty")           选择所有的为空（也不包括文本节点）的td元素的数组 
+$("div:has(p)")         选择所有含有p标签的div元素 
+$("td:parent")          选择所有的以td为父节点的元素数组 
+
+层叠选择器： 
+$("form input")        选择所有的form元素中的input元素 
+$("#main > *")         选择id值为main的所有的子元素 
+$("label + input")     选择所有的label元素的下一个input元素节点，经测试选择器返回的是label标签后面直接跟一个input标签的所有input标签元素 
+$("#prev ~ div")       同胞选择器，选择id为prev 的下以及子元素 
+======================================================================================================================================= 
+jquery 获取json key ，不循环获取
+ var bb = {'123':{'ccc':'aa'}};
+    console.log(Object.keys(bb)); 
+======================================================================================================================================= 
+
+原生Js遍历json对象的方法
+myJson = {"name": "phpernote", "password": "1111"};
+for (var val in myJson) {
+    alert(val + " " + myJson[val]);//输出如:name 
+}  
+
+======================================================================================================================================= 
+选中 id#all3 下的所有input 的name=ask[]有键盘输入时启动keyup事件
+$('#all3').on('keyup','input[name="ask[]"]',function(){
+        
+});
+======================================================================================================================================= 
+绑定 #addmoney, #addmoney2, #addmoney3, #addmoney4,#addmoney5,#addmoney6,#addmoney7,#addmoney8' id到keyup事件
+$('#addmoney, #addmoney2, #addmoney3, #addmoney4,#addmoney5,#addmoney6,#addmoney7,#addmoney8').on('keyup', function() {
+    reward();
+    taskCount();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  'remark5' => string 'ghhjjjjkk' (length=9)
+  'refundName' => string '聚划算' (length=9)
+  'tasknum_refund' => string '3' (length=1)
+  'refundstime' => string '3' (length=1)
+  'issetbuyerattr5' => string '1' (length=1)
+  'startdate5' => string '2018-10-11 23:10:11' (length=19)
+  'enddate5' => string '2018-10-11 23:55:11' (length=19)
+  'addressAttr2' => string '上海，江苏，浙江，安徽，江西，北京，天津，山西，山东，河北，内蒙古，陕西，新疆，甘肃，宁夏，青海' (length=144)
+  'ageAttr' => string '1' (length=1)
+  'sexAttr' => string '2' (length=1)
+  'gradeAttr' => string '1' (length=1)
+  'huaBeiAttr' => string '1' (length=1)
+  'classAttr' => 
+    array (size=4)
+      0 => string '服装鞋包' (length=12)
+      1 => string '手机数码' (length=12)
+      2 => string '运动户外' (length=12)
+      3 => string '文化娱乐' (length=12)
+  'addmoney5' => string '3' (length=1)
+
+
+
+
+
+
+
+
+
+
+
+  
+type_id 70
+unix_timestamp(now())
+insert into index_activity(type_id,date,activityname,parent_id) 
+values(70,unix_timestamp(now()),'有好货',0);
+insert into index_activity(type_id,date,activityname,parent_id) 
+values(70,unix_timestamp(now()),'淘金币',0);
+
+
+
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'女装',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'男装',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'鞋包',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'内衣',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'饰品',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'运动',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'美妆',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'童装',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'食品',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'母婴',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'百货',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'汽车',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'家电',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'数码',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'家装',1);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'家纺',1);
+
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'数码家电',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'服饰内衣',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'零食冲饮',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'母婴童装',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'洗护美妆',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'居家百货',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'鞋包配饰',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'生鲜滋补',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'运动户外',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'数码家电',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'服饰内衣',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'零食冲饮',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'母婴童装',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'洗护美妆',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'居家百货',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'鞋包配饰',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'生鲜滋补',2);
+insert into index_activity(type_id,date,activityname,parent_id) values(70,unix_timestamp(now()),'运动户外',2);

@@ -1,0 +1,71 @@
+最近由于工作需要，要用PHP判断手机号的归属地，方法有很多，最常见的方法是第三方提供的api,常见的api如下：
+
+一、淘宝网API
+
+API地址： http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=15850781443 
+参数： 
+tel：手机号码 
+返回：JSON
+
+二、拍拍API
+
+API地址： http://virtual.paipai.com/extinfo/GetMobileProductInfo?mobile=15850781443&amount=10000&callname=getPhoneNumInfoExtCallback 
+参数： 
+mobile：手机号码 
+callname：回调函数 
+amount：未知（必须） 
+返回：JSON
+
+三、财付通API
+
+API地址： http://life.tenpay.com/cgi-bin/mobile/MobileQueryAttribution.cgi?chgmobile=15850781443 
+参数： 
+chgmobile：手机号码 
+返回：xml
+
+四、百付宝API
+
+API地址： https://www.baifubao.com/callback?cmd=1059&callback=phone&phone=15850781443 
+参数： 
+phone：手机号码 
+callback：回调函数 
+cmd：未知（必须） 
+返回：JSON
+
+五、115API
+
+API地址： http://cz.115.com/?ct=index&ac=get_mobile_local&callback=jsonp1333962541001&mobile=15850781443 
+参数： 
+mobile：手机号码 
+callback：回调函数 
+返回：JSON
+
+PHP调用百付宝API实例：
+
+
+$mobile = "18648900010";  //要查询的电话号码
+$content = get_mobile_area($mobile);
+var_dump( $content);
+
+function get_mobile_area($mobile){
+    $sms = array('operator'=>'', 'area'=>'');    //初始化变量
+	
+    //根据淘宝的数据库调用返回值
+	$url="https://www.baifubao.com/callback?cmd=1059&callback=phone&phone=".$mobile."&t=".time();
+    $content = file_get_contents($url);
+
+	$start=strpos($content,'(');
+
+
+	$ddd=substr($content,$start+1); 
+	$end=strpos($ddd,')');
+	$ddd=substr($ddd,0,$end);
+	$gggg=json_decode($ddd);
+
+    $sms['operator'] = $gggg->data->operator;  //截取字符串
+    $sms['area'] = $gggg->data->area;
+    return $sms;
+}
+
+
+

@@ -1,0 +1,70 @@
+
+时间戳转换日期 
+
+{php echo date('Y-m-d H:i',$vo['createtime'])}
+
+
+
+ //发送订单消息
+// m('notice')->sendOrderMessage($item['id']);
+
+//确定完成订单给会员加会员积分
+//  m('member')->upgradeLevel($item['openid']);
+
+//设置店铺积分
+// m('order')->setStocksAndCredits($item['id'], 3); 
+
+//生成订单号
+ $ordersn = m('common')->createNO('order', 'ordersn', 'SH');
+ 
+ 
+ 
+
+ 
+/**
+ * 面板
+ FoxUI.tab({
+        container: $('#tab'), // 容器
+        handlers: { // 点击后回调处理器
+            tab: function() {
+                modal.changeTab('')
+            },
+            tab0: function() {
+                modal.changeTab(0)
+            },
+            tab1: function() {
+                modal.changeTab(1)
+            },
+            tab2: function() {
+                modal.changeTab(2)
+            },
+            tab3: function() {
+                modal.changeTab(3)
+            },
+            tab4: function() {
+                modal.changeTab(4)
+            }
+        }
+    })
+ * @param params
+ */
+FoxUI.tab = function (params) {
+    var self = this;
+    self.params = $.extend({}, params || {});
+    var container = self.params.container || false;
+    if (!container) {
+        return;
+    }
+    self.container = $(container); // 包含tab键的容器
+    self.tabs = self.container.find("a");
+    self.tabs.click(function () {
+        var tab = $.trim($(this).data('tab'));
+        self.container.find('a.active').removeClass('active');
+        $(this).addClass('active');
+        if (self.params.handlers) { // 点击后回调的处理器
+            if (self.params.handlers[tab] && typeof (self.params.handlers[tab]) == 'function') {
+                self.params.handlers[tab]();
+            }
+        }
+    });
+};

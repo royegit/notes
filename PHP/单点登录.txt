@@ -1,0 +1,3 @@
+session 跨域
+
+Nginx Session 共享
