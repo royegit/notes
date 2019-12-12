@@ -1,0 +1,9 @@
+邮件发送服务器(SMTP)      ssl://smtp.qq.com
+
+服务器(SMTP)端口		  465
+
+邮箱账号				  877720222@qq.com
+
+邮箱密码/授权码			  axabicykvczvbcgb
+
+测试接收的邮件地址		  154256500@qq.com  
