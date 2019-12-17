@@ -16,7 +16,7 @@ yum -y install mailx
 
 #在 vi /etc/mail.rc  文件末尾添加 如下配置
 
-set nss-config-dir=/etc/mail.rc_ssl.crt
+set nss-config-dir=/root/.certs
 set smtp-user-starttls
 set ssl-verify=ignore
 set from=877720222@qq.com
@@ -24,3 +24,20 @@ set smtp=smtps://smtp.qq.com:465
 set smtp-auth-user=877720222@qq.com
 set smtp-auth-password=axabicykvczvbcgb
 set smtp-auth=login
+
+
+//生成邮箱证书
+echo -n | openssl s_client -connect smtp.qq.com:465 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ~/.certs/qq.crt
+certutil -A -n "GeoTrust SSL CA" -t "C,," -d ~/.certs -i ~/.certs/qq.crt
+certutil -A -n "GeoTrust Global CA" -t "C,," -d ~/.certs -i ~/.certs/qq.crt
+certutil -A -n "GeoTrust SSL CA - G3" -t "Pu,Pu,Pu"  -d ./ -i qq.crt
+certutil -L -d /root/.certs
+
+
+
+
+
+
+
+
+
