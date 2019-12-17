@@ -7,3 +7,20 @@
 邮箱密码/授权码			  axabicykvczvbcgb
 
 测试接收的邮件地址		  154256500@qq.com  
+
+
+
+linux 配置 email 发送
+
+yum -y install mailx
+
+#在 vi /etc/mail.rc  文件末尾添加 如下配置
+
+set nss-config-dir=/etc/mail.rc_ssl.crt
+set smtp-user-starttls
+set ssl-verify=ignore
+set from=877720222@qq.com
+set smtp=smtps://smtp.qq.com:465
+set smtp-auth-user=877720222@qq.com
+set smtp-auth-password=axabicykvczvbcgb
+set smtp-auth=login
