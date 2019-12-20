@@ -1,0 +1,278 @@
+　
+
+  
+  
+  
+  1、在where子句中使用 ！= 或 <>操作符，索引将被放弃使用，会进行全表查询。
+
+ 　　如SQL:SELECT id FROM A WHERE ID != 5 优化成：SELECT id FROM A WHERE ID>5 OR ID<5
+ 
+ 
+ 
+  2、在where子句中使用 IS NULL 或 IS NOT NULL 判断，索引将被放弃使用，会进行全表查询。
+
+　　 如SQL:SELECT id FROM A WHERE num IS NULL 优化成num上设置默认值0，确保表中num没有null值，然后SQL为：SELECT id FROM A WHERE num=0
+
+
+
+　3、where子句使用IN 或 NOT IN的优化
+
+　　in和not in 也要慎用，否则也会导致全表扫描。
+	对于连续的数值，能用 between 就不要用 in 了
+　　 方案一：between替换in
+
+　　 如SQL:SELECT id FROM A WHERE num in(1,2,3) 优化成：SELECT id FROM A WHERE num between 1 and 3
+
+　　 方案二： exist 替换in
+
+　　 如SQL:SELECT id FROM A WHERE num in(select num from b ) 优化成：SELECT num FROM A WHERE num exists(select 1 from B where B.num = A.num)
+
+　　 方案三：left join替换in
+
+　　 如SQL:SELECT id FROM A WHERE num in(select num from B) 优化成：SELECT id FROM A LEFT JOIN B ON A.num = B.num
+
+
+	4、where子句中对字段进行表达式操作的优化
+	
+	　　不要在where子句中的“=”左边进行函数、算数运算或其他表达式运算，否则系统将可能无法正确使用索引。
+	
+	　　 如SQL:SELECT id FROM A WHERE num/2 = 100 优化成：SELECT id FROM A WHERE num = 100*2
+	
+	　　 如SQL:SELECT id FROM A WHERE substring(name,1,3) = 'abc' 优化成：SELECT id FROM A WHERE LIKE 'abc%'
+	
+	　　 如SQL:SELECT id FROM A WHERE datediff(day,createdate,'2016-11-30')=0 优化成：SELECT id FROM A WHERE createdate>='2016-11-30' and createdate<'2016-12-1'
+	
+	　　 如SQL:SELECT id FROM A WHERE year(addate) <2016 优化成：SELECT id FROM A where addate<'2016-01-01'
+	
+
+　	5、limit分页优化
+	
+　	　　　当偏移量特别时，limit效率会非常低
+	
+　	　　　SELECT id FROM A LIMIT 1000,10   很快
+	
+　	　　　SELECT id FROM A LIMIT 90000,10 很慢
+	
+　	　　　优化方法：
+	
+　	　　　方法一：select id from A order by id limit 90000,10; 很快，0.04秒就OK。 因为用了id主键做索引当然快
+	
+　	　　　方法二：select id,title from A where id>=(select id from A order by id limit 90000,1) limit 10;    //推荐使用这种
+	
+		　方法三：select id from A where id  between 10000000 and 10000010;
+			查询时间：15ms 12ms 9ms
+			这种查询方式能够极大地优化查询速度，基本能够在几十毫秒之内完成。限制是只能使用于明确知道id的情况，不过一般建立表的时候，都会添加基本的id字段，这为分页查询带来很多遍历。
+			
+		  方法四：
+		  以下例子 当时候 
+			select * from wl_tagindex where byname=’f’ order by id limit 300000,10 执行时间是 3.21s
+			优化后：
+			select * from ( select id from wl_tagindex where byname=’f’ order by id limit 300000,10 ) a left join wl_tagindex b on a.id=b.id  执行时间为 0.11s 速度明显提升
+								
+
+　 6、批量插入优化
+		  INSERT into person(name,age) values('A',14)
+		  INSERT into person(name,age) values('B',14)
+		  INSERT into person(name,age) values('C',14)
+　　　　可优化为：
+		  INSERT into person(name,age) values('A',14),('B',14),('C',14),
+
+	7、利用limit 1 、top 1 取得一行
+	
+	　　　　有时要查询一张表时，你知道只需要看一条记录，你可能去查询一条特殊的记录。可以使用limit 1 或者 top 1 来终止数据库索引继续扫描整个表或索引。
+	
+	　　　　如SQL：SELECT id FROM A LIKE 'abc%' 优化为：SELECT id FROM A LIKE 'abc%' limit 1
+
+
+
+　　8、Inner join 和 left join、right join、子查询
+
+ 　　第一：inner join内连接也叫等值连接是，left/rightjoin是外连接。
+
+　　　　 SELECT A.id,A.name,B.id,B.name FROM A LEFT JOIN B ON A.id =B.id;
+
+　　　　 SELECT A.id,A.name,B.id,B.name FROM A RIGHT JOIN ON B A.id= B.id;
+
+　　　　 SELECT A.id,A.name,B.id,B.name FROM A INNER JOIN ON A.id =B.id;
+
+　　 　　经过来之多方面的证实inner join性能比较快，因为inner join是等值连接，或许返回的行数比较少。但是我们要记得有些语句隐形的用到了等值连接，如：
+
+ 　　　　SELECT A.id,A.name,B.id,B.name FROM A,B WHERE A.id = B.id;
+
+ 　　　　推荐：能用inner join连接尽量使用inner join连接
+
+　　* 第二：子查询的性能又比外连接性能慢，尽量用外连接来替换子查询。*
+
+　　　　Select* from A where exists (select * from B where id>=3000 and A.uuid=B.uuid);
+
+　　　　A表的数据为十万级表，B表为百万级表，在本机执行差不多用2秒左右，我们可以通过explain可以查看到子查询是一个相关子查询(DEPENDENCE SUBQUERY);Mysql是先对外表A执行全表查询，然后根据uuid逐次执行子查询，如果外层表是一个很大的表，我们可以想象查询性能会表现比这个更加糟糕。
+
+      　　一种简单的优化就是用inner join的方法来代替子查询，查询语句改为：
+
+  　　　Select* from A inner join B ON A.uuid=B.uuid using(uuid) where b.uuid>=3000;  这个语句执行测试不到一秒；
+
+　　第三：使用JOIN时候，应该用小的结果驱动大的结果（left join 左边表结果尽量小，如果有条件应该放到左边先处理，right join同理反向），同时尽量把牵涉到多表联合的查询拆分多个query	(多个表查询效率低，容易锁表和阻塞)。如：
+
+		select * from A left join B A.id=B.ref_id where  A.id>10; 可以优化为： select * from (select * from A wehre id >10) T1 left join B on T1.id=B.ref_id;
+
+　
+　　9、exist 代替 in
+
+		SELECT * from A WHERE idin (SELECT id from B)
+		SELECT * from A WHERE id EXISTS(SELECT 1 from A.id= B.id)
+		　　in 是在内存中遍历比较
+		
+		　　exist 需要查询数据库，所以当B的数据量比较大时，exists效率优于in.
+		
+		　　in()只执行一次，把B表中的所有id字段缓存起来，之后检查A表的id是否与B表中的id相等，如果id相等则将A表的记录加入到结果集中，直到遍历完A表的所有记录。
+		
+		　　In 操作的流程原理如同一下代码
+		
+		复制代码
+			List resultSet={};
+		
+			Array A=(select * from A);
+			Array B=(select id from B);
+		
+			for(int i=0;i<A.length;i++) {
+					for(int j=0;j<B.length;j++) {
+				if(A[i].id==B[j].id) {
+					resultSet.add(A[i]);
+					break;
+				}
+			}
+			}
+			return resultSet;        
+		复制代码
+		　　可以看出，当B表数据较大时不适合使用in()，因为它会B表数据全部遍历一次
+		
+		　　如：A表有10000条记录，B表有1000000条记录，那么最多有可能遍历10000*1000000次，效率很差。
+		
+		　　再如：A表有10000条记录，B表有100条记录，那么最多有可能遍历10000*100次，遍历次数大大减少，效率大大提升。
+		
+		　　结论：in()适合B表比A表数据小的情况
+		
+		　　exist()会执行A.length()次，执行过程代码如下
+		
+		复制代码
+			List resultSet={};
+			Array A=(select * from A);
+			for(int i=0;i<A.length;i++) {
+			if(exists(A[i].id) {  //执行select 1 from B where B.id=A.id是否有记录返回
+				resultSet.add(A[i]);
+			}
+			}
+			return resultSet;
+		复制代码
+		　　当B表比A表数据大时适合使用exists()，因为它没有那么多遍历操作，只需要再执行一次查询就行。
+		
+		　　如：A表有10000条记录，B表有1000000条记录，那么exists()会执行10000次去判断A表中的id是否与B表中的id相等。
+		
+		　　如：A表有10000条记录，B表有100000000条记录，那么exists()还是执行10000次，因为它只执行A.length次，可见B表数据越多，越适合exists()发挥效果。
+		
+		　　再如：A表有10000条记录，B表有100条记录，那么exists()还是执行10000次，还不如使用in()遍历10000*100次，因为in()是在内存里遍历比较，而exists()需要查询数据库，
+		
+		　　我们都知道查询数据库所消耗的性能更高，而内存比较很快。
+		
+		　*　结论：exists()适合B表比A表数据大的情况  *
+		
+		　　 当A表数据与B表数据一样大时，in与exists效率差不多，可任选一个使用。
+		
+
+
+
+		10、尽量避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，
+			如：
+			select id from t where num=10 or num=20
+			可以这样查询：
+			select id from t where num=10
+			union all
+			select id from t where num=20
+
+
+		11、索引并不是越多越好，索引固然可以提高相应的 select 的效率，
+			但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引，
+			所以怎样建索引需要慎重考虑，视具体情况而定。
+			* 一个表的索引数最好不要超过6个，* 若太多则应考虑一些不常使用到的列上建的索引是否有 必要。
+
+==========================================================================================================================================================================		
+
+
+	数据库设计
+		
+		1、
+		数据库表字段类型规范
+        用尽量少的存储空间来存数一个字段的数据;
+        例如：能使用int就不要使用varchar、char,能用varchar(16)就不要使用varchar(256);
+        IP地址最好使用int类型;
+        固定长度的类型最好使用char,例如：邮编;
+        能使用tinyint就不要使用smallint,int;
+        最好给每个字段一个默认值,最好不能为null;
+		
+		2、
+		数据库表索引规范
+        命名简洁明确,例如：user_login表user_name字段的索引应为user_name_index唯一索引;
+        为每个表创建一个主键索引;
+        为每个表创建合理的索引;
+        建立复合索引请慎重;
+		
+		3、简单熟悉数据库范式
+        第一范式(1NF)：字段值具有原子性,不能再分(所有关系型数据库系统都满足第一范式);
+            例如：姓名字段,其中姓和名是一个整体,如果区分姓和名那么必须设立两个独立字段;
+         
+        第二范式(2NF)：一个表必须有主键,即每行数据都能被唯一的区分;
+            备注：必须先满足第一范式;
+         
+        第三范式(3NF)：一个表中不能包涵其他相关表中非关键字段的信息,即数据表不能有沉余字段;
+            备注：必须先满足第二范式;
+		
+		数据库的三范式：
+
+		①字段不可分。
+		
+		②有主键，非主键字段依赖主键。
+		
+		③非主键字段不能互相依赖。
+
+         
+        备注：往往我们在设计表中不能遵守第三范式,因为合理的沉余字段将会给我们减少join的查询;
+              例如：相册表中会添加图片的点击数字段,在相册图片表中也会添加图片的点击数字段;
+		
+==========================================================================================================================================================================		
+		
+		
+	MYSQL 之  having 的用法
+		
+	1. having与group by联合使用，用于分组后的筛选
+	
+	eg:查询订单按渠道分组后订单总金额大于1000的渠道
+	
+	  SELECT regagent,sum(amount) as total FROM `cy_pay_ok` group by regagent having total>1000 ;
+	 
+	
+	2. having不用group by联合使用，与where类似
+	
+	eg: 查询单笔订单充值金额大于1000的
+	
+	SELECT regagent,amount FROM `cy_pay_ok`  having amount>1000 ;
+	
+	SELECT regagent,amount FROM `cy_pay_ok`  where amount>1000 ;
+
+		
+		
+		
+ALL、ANY子查询
+
+ALL和ANY操作符的常见用法是结合一个相对比较操作符对一个数据列子查询的结果进行测试。它们测试比较值是否与子查询所返回的全部或一部分值匹配。
+比如说，如果比较值小于或等于子查询所返回的每一个值，<= ALL将是true；只要比较值小于或等于子查询所返回的任何一个值，<= ANY将是true。SOME是ANY的一个同义词。
+
+	下面这条语句用来检索最早出生的总统，具体做法是选取出生日期小于或等于president数据表里的所有出生日期（只有最早的出生日期满足这一条件）的那个数据行：
+	
+	mysql> SELECT last_name, first_name, birth FROM president  
+		-> WHERE birth <= ALL (SELECT birth FROM president);  
+	+------------+------------+------------+  
+	| last_name  | first_name | birth      |  
+	+------------+------------+------------+  
+	| Washington | George     | 1732-02-22 |  
+	+------------+------------+------------+  		
+		
