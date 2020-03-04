@@ -80,5 +80,3 @@ echo $domain;
 $ggg=file_get_contents('http://i.tianqi.com/index.php?c=code&id=7');
 echo $ggg;exit;
 
-S&t!%6&ct!*^7!t8ub
-ddddd
