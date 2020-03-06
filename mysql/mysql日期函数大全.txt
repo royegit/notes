@@ -1,0 +1,108 @@
+#查询某日期是星期几（1=星期天，2=星期一，…………，7=星期六）。
+SELECT DAYOFWEEK('2019-09-23') 
+
+#查询某日期是星期几（0=星期一，1=星期二，…………，6=星期天）。
+SELECT WEEKDAY('2019-09-29') 
+
+#查询该日期为当月的第几天(1-31) 。
+SELECT DAYOFMONTH('2019-09-29') 
+
+#查询该日期为当年的第几天(1-366) 。
+SELECT DAYOFYEAR('2019-09-29') 
+
+#查询某日期的月份(1-12)。
+SELECT MONTH('2019-01-29') 
+
+#查询某天的星期，返回英文单词。
+SELECT DAYNAME('2019-09-29') 
+
+#查询某日期的月份，返回英文单词。
+SELECT MONTHNAME('2019-09-29') 
+
+#查询某日期的季度（1-4） 
+SELECT QUARTER('2019-11-28') 
+
+#查询某日是一年的第几天，第二个参数可选，默认为服务器的默认星期模式，
+#查询服务器的默认星期模式：SHOW VARIABLES LIKE 'default_week_format';
+#即一个星期从星期几开始，（0-7分别表示新的一周从周日-周六开始）。
+SELECT WEEK('2019-01-06')
+SELECT WEEK('2019-01-01','1')
+
+#查询日期的年份（在1000-9999）。
+SELECT  YEAR('2019-01-06') 
+
+#获取小时数(0-23)。
+SELECT HOUR('2019-01-06 13:05:03') 
+SELECT HOUR('13:05:03') 
+
+#返回分钟数(0-59)。
+SELECT MINUTE('2019-01-06 13:59:03') 
+SELECT MINUTE('13:59:03') 
+
+#返回秒数(0-59)。
+SELECT SECOND('2019-01-06 13:59:03') 
+SELECT SECOND('13:59:03') 
+
+#给某日期新增月份后返回日期(日期格式YYMM或YYYYMM，建议使用后者。)。 
+SELECT PERIOD_ADD('201909','-14') 
+SELECT PERIOD_ADD('201909','14')
+
+#查询两个日期之间的月份数。
+SELECT PERIOD_DIFF('201909','201909') 
+SELECT PERIOD_DIFF('201809','201909')
+SELECT PERIOD_DIFF('201909','201809')
+
+#给某日期减少或增加秒钟数(年用year、月month、天用day、小时用hour、分钟用minute)。
+SELECT DATE_ADD('1999-12-31 23:59:59',INTERVAL 1 SECOND)
+SELECT DATE_SUB('1999-12-31 23:59:59',INTERVAL 1 SECOND) 
+SELECT ADDDATE('1999-12-31 23:59:59',INTERVAL 1 SECOND) 
+SELECT SUBDATE('1999-12-31 23:59:59',INTERVAL 1 SECOND)
+
+#复合单位如下，即对该时间进行多个单位时间的操作。
+SELECT SUBDATE('1999-12-31 23:59:59',INTERVAL '1 1' HOUR_MINUTE)
+SELECT SUBDATE('1999-12-31 23:59:59',INTERVAL '1 1' MINUTE_SECOND)
+SELECT SUBDATE('1999-12-31 23:59:59',INTERVAL '1 1' DAY_HOUR)
+SELECT SUBDATE('1999-12-31 23:59:59',INTERVAL '1 1' YEAR_MONTH)
+
+#格式化日期（这里列举常用的几种模式）。
+SELECT DATE_FORMAT('2009-08-13 10:08:52','%Y年%m月%d日%H时%i分%s秒') 
+SELECT DATE_FORMAT('20090813100852','%Y-%m-%d %H:%i:%s') 
+
+#格式化日期,该函数只能处理小时、分钟和秒。
+SELECT TIME_FORMAT('2009-08-13 10:08:52','%H时%i分%s秒')
+SELECT TIME_FORMAT('20090813100852','%H:%i:%s')
+
+#返回当前日期，格式为：%Y-%m-%d。
+SELECT CURDATE() 
+SELECT CURRENT_DATE()
+
+#返回当前时间，格式为：%H:%i:%s。
+SELECT CURTIME() 
+SELECT CURRENT_TIME()
+
+#返回具体时间，格式为：%Y-%m-%d %H:%i:%s。
+SELECT NOW() 
+SELECT SYSDATE() 
+SELECT CURRENT_TIMESTAMP()
+
+#返回日期对应的时间戳。 
+SELECT UNIX_TIMESTAMP('2009-08-13 10:08:52') 
+SELECT UNIX_TIMESTAMP('20090813100852') 
+
+#生成毫秒级别的时间戳
+SELECT 
+REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)),'.','')  order_number ;
+
+#生成秒级别的时间戳
+SELECT UNIX_TIMESTAMP()
+
+#返回时间戳对应的日期。
+SELECT FROM_UNIXTIME(1250129332) 
+SELECT FROM_UNIXTIME(1250129332,'%Y-%m-%d %H:%i:%s') 
+
+#返回某时间在当年过了多少秒。
+SELECT TIME_TO_SEC('2009-01-01 00:01:50') 
+
+#返回某时间在当天过了多少秒。
+SELECT TIME_TO_SEC('00:00:21'); 
+ 
