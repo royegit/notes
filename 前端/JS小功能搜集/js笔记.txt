@@ -1,0 +1,15 @@
+<div id="video_box">
+   <video src="sp.mp4" id="my-video" height="240" controls="controls" style="width:100%;"></video>
+</div>
+
+  <script> 
+
+  $(function(){
+    $('#my-video').load("loadedmetadata", function(){
+        //console.log('视频页面');
+        var height = $('#my-video').height();
+        console.log(height);
+    });
+  });
+
+  </script>
