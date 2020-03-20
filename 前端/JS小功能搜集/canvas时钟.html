@@ -1,0 +1,128 @@
+<canvas id="view" height="300px" width="300px"></canvas>
+
+<script>
+var dom=document.getElementById("view");
+var ctx=dom.getContext("2d");//方法返回一个用于在画布上绘图的环境。 2d环境
+var width=ctx.canvas.width; 
+var height=ctx.canvas.height;
+var r=width/2;  //r 是 150
+	console.log('画布:'+ctx);
+	console.log('宽:'+width);
+	console.log('高:'+height);
+	console.log('R 圆半径：'+r);
+	console.log('Math.PI 是 π ：'+Math.PI);
+	console.log('2*Math.PI：'+(r-5));
+	console.log('r-5：'+2*Math.PI);
+	
+function drawBackground(){
+        ctx.translate(r,r);//设置画布的坐标位置
+        ctx.beginPath();   //开始画
+        ctx.lineWidth=10;  //最外边线宽
+		/**
+		* x	圆的中心的 x 坐标。
+		* y	圆的中心的 y 坐标。  6.283185307179586
+		* r	圆的半径。
+		* sAngle 起始角，以弧度计（弧的圆形的三点钟位置是 0 度）。
+		* eAngle 结束角，以弧度计。
+		**/
+        ctx.arc(0,0,r-5,0,2*Math.PI); //画圆
+        ctx.stroke();				  // 进行绘制
+		
+
+		//围绕着内圈画点
+        for(var i=0;i<60;i++){
+			var x=(r-20)*Math.cos(Math.PI*2/60*i); //x轴 (半径-20)*Math.cos(Math.PI*2/60*i)=每一等分的位置; 分60等份 
+			var y=(r-20)*Math.sin(Math.PI*2/60*i);     
+			//console.log(i+'/5='+i%5);	
+
+			//分60等份取模(就是除尽为止)会得出:
+			// 0/5=0;  1/5=1;  2/5=2;  3/5=3;  4/5=4;  5/5=0;  6/5=1;  7/5=2;  8/5=3;  9/5=4; 
+			// 10/5=0; 11/5=1; 12/5=2; 13/5=3; 14/5=4; 15/5=0; 16/5=1; 17/5=2; 18/5=3; 19/5=4; ....59/5=4 以此类推
+			if(i%5===0){
+                ctx.fillStyle="#000000";  //每遇到一个 0 整点颜色值
+			}else{
+                ctx.fillStyle="#cccccc";  //非整点颜色值
+			}
+			ctx.beginPath();
+			ctx.arc(x,y,5,0,2*Math.PI);
+			ctx.fill();
+        }
+		
+		//围绕着内圈画数字
+        ctx.font="20px Arial";      //字体
+        ctx.textAlign="center";		//文本左右居中
+        ctx.textBaseline="middle";  //文本基线是 em 方框的正中。
+        ctx.fillStyle="#000000";    //文本颜色值
+        for(var j=0;j<12;j++){
+			var ax=(r-50)*Math.cos(Math.PI*2/12*j);
+			var ay=(r-50)*Math.sin(Math.PI*2/12*j);    
+			//console.log('text is:'+j>9?j-9:j+3);			
+			ctx.beginPath();
+			ctx.fillText(j>9?j-9:j+3,ax,ay);
+			ctx.fill();
+        }
+}
+
+function drawHour(hour,minute,second){
+        ctx.save();
+        ctx.beginPath();
+        var rad=2*Math.PI/12*hour+2*Math.PI/12/60*minute+2*Math.PI/12/60/3600*second;  //按小时，时针走算法
+        ctx.rotate(rad);
+        ctx.lineWidth=14;
+        ctx.lineCap="round";
+        ctx.moveTo(0,20);
+        ctx.lineTo(0,-r+100);  //lineTo() 方法添加一个新点，然后创建从该点到画布中最后指定点的线条（该方法并不会创建线条）
+        ctx.stroke();
+        ctx.restore();
+}
+function drawMinute(minute,second){
+        ctx.save();
+        ctx.beginPath();
+        var rad=2*Math.PI/60*minute+2*Math.PI/3600*second;  						 //按小时，时针走算法
+        ctx.rotate(rad);
+        ctx.lineWidth=10;
+        ctx.lineCap="round";
+        ctx.moveTo(0,20);
+        ctx.lineTo(0,-r+80);
+        ctx.stroke();
+        ctx.restore();
+}
+//画分针
+function drawSecond(second){
+        ctx.save();
+        ctx.beginPath();		   //开始画布
+        ctx.fillStyle="#FF0000";   //红色
+        var rad=2*Math.PI/60*second;
+        ctx.rotate(rad); 	       //rotate 方法旋转当前的绘图
+        ctx.lineWidth=2;
+        ctx.lineCap="round";       //向线条的每个末端添加圆形线帽。
+        ctx.moveTo(0,30);          //坐标的开始位置
+        ctx.lineTo(8,0);
+        ctx.lineTo(0,-r+30);
+        ctx.lineTo(-8,0);
+        ctx.lineTo(0,30);
+        ctx.fill();			       //矩形填充红色
+        ctx.restore();
+}
+function run(){
+        ctx.clearRect(0,0,width,height); // 方法清空给定矩形内的指定像素。
+        ctx.save();
+        var time =new Date();
+        var hour=time.getHours();   	//获取小时
+        var minute=time.getMinutes();   //获取分钟
+        var second=time.getSeconds();   //获取秒钟
+		
+    drawBackground();				//钟盘
+    drawHour(hour,minute,second);   //时针
+    drawMinute(minute,second);      //分针
+    drawSecond(second);      		//秒针
+	
+		//画圆心点
+		ctx.fillStyle="#555";
+		ctx.beginPath();
+        ctx.arc(0,0,8,0,2*Math.PI);
+        ctx.fill();
+        ctx.restore();
+}
+window.setInterval(function(){run();},1000);
+</script>
