@@ -1,0 +1,636 @@
+
+ThinkPHP 3.2.3
+
+\ThinkPHP\Library\Org\Util\String.class.php			//文件位置
+
+$String = new \Org\Util\String();  //String类
+echo $String->uuid(); 		   	   //生成UUID 单机使用  		生成的样子 {2e1c40c8-9913-9778-12b8-992f5c5f2070}
+echo $String->keyGen(); 		   //生成Guid主键       		生成的样子  24f102342a3c32666e551f9bd59662ac
+echo $String->isUtf8('哈喽');	   //检查字符串是否是UTF8编码	返回 1或 0
+
+===========================================================================================================================================================
+/**
+ * 字符串截取，支持中文和其他编码
+ * @static
+ * @access public
+ * @param string $str 需要转换的字符串
+ * @param string $start 开始位置
+ * @param string $length 截取长度
+ * @param string $charset 编码格式
+ * @param string $suffix 截断显示字符
+ * @return string
+ */
+echo $String->msubstr('公共类库通常是指',2,4,'utf-8',false); 		//字符串截取，支持中文和其他编码  截取后：类库通常
+===========================================================================================================================================================
+/**
+ * 产生随机字串，可用来自动生成密码
+ * 默认长度6位 字母和数字混合 支持中文
+ * @param string $len 长度
+ * @param string $type 字串类型 有 1,2,3,4种类型 可以看看源码
+ * 0 字母 1 数字 其它 混合
+ * @param string $addChars 额外字符
+ * @return string
+ */
+echo  $String->randString(6);  		//生成的样子 FhaCNZ
+
+===========================================================================================================================================================
+
+/**
+ * 生成一定数量的随机数，并且不重复
+ * @param integer $number 数量
+ * @param string $len 长度
+ * @param string $type 字串类型
+ * 0 字母 1 数字 其它 混合
+ * @return string
+ */
+$array= $String->buildCountRand(3,4,0);
+var_dump($array);exit;
+
+生成的样子 ：
+F:\PHPobject\liveHome2\Application\Home\Controller\MyTestController.class.php:18:
+array (size=3)
+  0 => string 'yGoK' (length=4)
+  1 => string 'ytab' (length=4)
+  2 => string 'HYdU' (length=4)
+  
+===========================================================================================================================================================
+
+/**
+ *  带格式生成随机字符 支持批量生成
+ *  但可能存在重复
+ * @param string $format 字符格式
+ *     # 表示数字 * 表示字母和数字 $ 表示字母
+ * @param integer $number 生成数量
+ * @return string | array
+ */
+
+ $array= $String->buildFormatRand('#',4);
+ var_dump($array);exit;
+
+生成的样子 ：
+
+F:\PHPobject\liveHome2\Application\Home\Controller\MyTestController.class.php:18:
+array (size=4)
+  0 => string '3' (length=1)
+  1 => string '3' (length=1)
+  2 => string '9' (length=1)
+  3 => string '7' (length=1)
+
+===========================================================================================================================================================
+
+/**
+ * 获取一定范围内的随机数字 位数不足补零
+ * @param integer $min 最小值
+ * @param integer $max 最大值
+ * @return string
+ */
+ 
+echo $String->randNumber(1,10004);     //生成的样子 ：08337
+
+===========================================================================================================================================================
+
+/**
+ * 自动转换字符集 支持数组转换
+ * @param integer $string 需要转换的字符串
+ * @param integer $from  从GBK
+ * @return string $to    到 utf-8
+ */
+echo  $String->autoCharset('公共类库通常是指');      //生成的样子 ： 鍏叡绫诲簱閫氬父鏄寚(该字符串原本的字符集是utf8的所以在从gbk转成utf8就变成乱码了)
+
+
+===========================================================================================================================================================
+
+
+\ThinkPHP\Library\Org\Util\Date.class.php			//文件位置
+
+
+/**
+ * 计算日期差
+ *
+ *  w - weeks
+ *  d - days
+ *  h - hours
+ *  m - minutes
+ *  s - seconds
+ * @static
+ * @access public
+ * @param mixed $date 要比较的日期
+ * @param string $elaps  比较跨度
+ * @return integer
+ */
+
+        $Date = new \Org\Util\Date();
+       
+        $array= $Date->dateDiff('2020-04-10 10:03:23');  // 输出:10.997083333333 （当时的日期是 2020-03-30 10:08:00）
+
+===========================================================================================================================================================
+
+
+/**
+ * 人性化的计算日期差
+ * @static
+ * @access public
+ * @param mixed $time 要比较的时间
+ * @param mixed $precision 返回的精度
+ * @return string
+ */
+ echo  $Date->timeDiff('2020-04-10 10:03:23');        // 输出: 1周前 （当时的日期是 2020-03-30 10:08:00）
+ 
+===========================================================================================================================================================
+
+ 
+/**
+ * 返回周的某一天 返回Date对象
+ * @access public
+ * @return Date
+ */
+echo  $Date->getDayOfWeek(2);					//输出： 2020-03-31 00:00:00   //返回当前或未来某一周的日期  （当时的日期是 2020-03-30 10:08:00）
+ 
+ 
+===========================================================================================================================================================
+ 
+/**
+* 计算月份的第一天 返回Date对象
+* @access public
+* @return Date
+*/
+
+ echo  $Date->firstDayOfMonth();				//输出： 2020-03-01 00:00:00  //返回当前月的第一天日期  （当时的日期是 2020-03-30 10:08:00）
+ 
+===========================================================================================================================================================
+ 
+/**
+* 计算年份的第一天 返回Date对象
+* @access public
+* @return Date
+*/
+
+ echo  $Date->firstDayOfYear();				//输出： 2020-01-01 00:00:00  //返回当前年的第一天日期  （当时的日期是 2020-03-30 10:08:00）
+ 
+ ===========================================================================================================================================================
+ 
+/**
+* 计算周的最后一天 返回Date对象
+* @access public
+* @return Date
+*/
+
+ echo  $Date->lastDayOfWeek();				//输出： 2020-04-05 00:00:00  //返回当前周的最后一天日期  （当时的日期是 2020-03-30 10:08:00）
+ 
+===========================================================================================================================================================
+ 
+/**
+* 计算月份的最后一天 返回Date对象
+* @access public
+* @return Date
+*/
+
+ echo  $Date->lastDayOfMonth();				//输出： 2020-03-31 00:00:00  //返回当前月的最后一天日期  （当时的日期是 2020-03-30 10:08:00）
+ 
+===========================================================================================================================================================
+ 
+/**
+*  计算年份的最后一天 返回Date对象
+* @access public
+* @return Date
+*/
+
+ echo  $Date->lastDayOfYear();				//输出：2020-12-31 00:00:00  //返回当前年的最后一天日期  （当时的日期是 2020-03-30 10:08:00）
+  
+ ===========================================================================================================================================================
+ 
+ 
+     /**
+     * 计算月份的最大天数
+     * @access public
+     * @return integer
+     */
+ 
+ 
+echo  $Date->maxDayOfMonth();		//输出 31  //返回月份的最后一天  （当时的日期是 2020-03-30 10:08:00）
+				
+ ===========================================================================================================================================================
+     /**
+     * 取得指定间隔日期
+     *
+     *    yyyy - 年
+     *    q    - 季度
+     *    m    - 月
+     *    y    - day of year
+     *    d    - 日
+     *    w    - 周
+     *    ww   - week of year
+     *    h    - 小时
+     *    n    - 分钟
+     *    s    - 秒
+     * @access public
+     * @param integer $number 间隔数目
+     * @param string $interval  比较类型
+     * @return Date
+     */		
+		
+ echo  $Date->dateAdd(9);		//输出 2020-04-08 17:16:08  //取得指定间隔日期  （当时的日期是 2020-03-30 10:08:00）
+ ===========================================================================================================================================================
+   		
+	
+
+\ThinkPHP\Library\Org\Util\CodeSwitch.class.php			//文件位置
+	
+	/**
+     * 编码转换函数,对整个文件进行编码转换
+	 * 支持以下转换
+	 * GB2312、UTF-8 WITH BOM转换为UTF-8
+	 * UTF-8、UTF-8 WITH BOM转换为GB2312
+     * @access public
+     * @param string $filename		文件名
+	 * @param string $out_charset	转换后的文件编码,与iconv使用的参数一致
+     * @return void
+     */		
+  $CodeSwitch = new \Org\Util\CodeSwitch();
+
+  $filename='';
+  echo  $CodeSwitch->DetectAndSwitch($filename);
+  
+  
+  ===========================================================================================================================================================
+    
+  	/**
+     * 目录遍历函数
+     * @access public
+     * @param string $path		要遍历的目录名
+     * @param string $mode		遍历模式,一般取FILES,这样只返回带路径的文件名
+     * @param array $file_types		文件后缀过滤数组
+	 * @param int $maxdepth		遍历深度,-1表示遍历到最底层
+     * @return void
+     */
+    $data=$CodeSwitch::searchdir('F:\PHPobject\liveHome');   //不传要遍历的目录名路径时遍历整个硬盘
+	
+	 //生成的样子 ：
+	 
+	F:\PHPobject\liveHome2\Application\Home\Controller\MyTestController.class.php:20:
+array (size=5219)
+  0 => string 'F:\PHPobject\liveHome/' (length=22)
+  1 => string 'F:\PHPobject\liveHome/.idea/' (length=28)
+  2 => string 'F:\PHPobject\liveHome/.idea/inspectionProfiles/' (length=47)
+  3 => string 'F:\PHPobject\liveHome/.svn/' (length=27)
+  4 => string 'F:\PHPobject\liveHome/.svn/pristine/' (length=36)
+  15 => string 'F:\PHPobject\liveHome/.svn/pristine/0a/' (length=39)
+  16 => string 'F:\PHPobject\liveHome/.svn/pristine/0b/' (length=39)
+  17 => string 'F:\PHPobject\liveHome/.svn/pristine/0c/' (length=39)
+  18 => string 'F:\PHPobject\liveHome/.svn/pristine/0d/' (length=39)
+  19 => string 'F:\PHPobject\liveHome/.svn/pristine/0e/' (length=39)
+  20 => string 'F:\PHPobject\liveHome/.svn/pristine/0f/' (length=39)
+  5 => string 'F:\PHPobject\liveHome/.svn/pristine/00/' (length=39)
+  
+===========================================================================================================================================================
+    
+\ThinkPHP\Library\Org\Util\ArrayList.class.php			//文件位置
+	/**
+     * 对整个项目目录中的PHP和HTML文件行进编码转换
+     * @access public
+     * @param string $app		要遍历的项目路径
+     * @param string $mode		遍历模式,一般取FILES,这样只返回带路径的文件名
+     * @param array $file_types		文件后缀过滤数组
+     * @return void
+     */
+	 
+	 
+     $array=array(1=>'哈喽',2=>'helow',3=>'hhh');
+	/**
+     * 架构函数
+     * @access public
+     * @param string $elements  初始化数组元素
+     */
+     
+	 $ArrayList = new \Org\Util\ArrayList($array);
+	 
+	/**
+     * 增加元素
+     * @access public
+     * @param mixed $element  要添加的元素
+     * @return boolean
+     */
+     $dataadd= $ArrayList->add('iiii');  //函数用于向数组插入新元素。新数组的值将被插入到数组的结尾。
+		
+		
+	$dataunshift= $ArrayList->unshift('uuu');  //函数用于向数组插入新元素。新数组的值将被插入到数组的开头。
+	
+	$datapop= $ArrayList->pop();   //删除数组中的最后一个元素
+	
+	
+	/**
+     * 增加元素列表
+     * @access public
+     * @param ArrayList $list  元素列表
+     * @return boolean
+     */
+	 $ggg=array('jjjj','eeeee','pppp');
+	$dataaddAll= $ArrayList->addAll($ggg); 
+	
+    /**
+     * 清除所有元素
+     * @access public
+     */	
+	$dataaddAll= $ArrayList->clear($ggg);
+	
+	/**
+     * 若要获得迭代因子，通过getIterator方法实现
+     * @access public
+     * @return ArrayObject
+     */
+     $data= $ArrayList->getIterator(); 
+	 
+	/**
+     * 是否包含某个元素
+     * @access public
+     * @param mixed $element  查找元素
+     * @return string
+     */
+     $data= $ArrayList->contains('jjjj');  //返回真或者假
+	 
+        var_dump($data);
+	
+	
+	
+	。。。。。等等还有更多关于数组的运用请到 ArrayList.class.php 文件去查看
+	
+	
+===========================================================================================================================================================
+  	
+  \ThinkPHP\Library\Org\Net\Http.class.php			//文件位置
+  
+  /**
+  * 采集远程文件
+  * @access public
+  * @param string $remote 远程文件名
+  * @param string $local 本地保存文件名和保存的路径
+  * @return mixed
+  */
+ $dataadd= $Http::curlDownload('http://livehomefile.oss-cn-shenzhen.aliyuncs.com/Public/audio/1585309607993.amr.mp3','./Public/1585309607993.mp3');
+
+	
+	
+	
+   /**
+    * 使用 fsockopen 通过 HTTP 协议直接访问(采集)远程文件
+    * 如果主机或服务器没有开启 CURL 扩展可考虑使用
+    * fsockopen 比 CURL 稍慢,但性能稳定
+    * @static
+    * @access public
+    * @param string $url 远程URL
+    * @param array $conf 其他配置信息
+    *        int   limit 分段读取字符个数
+    *        string post  post的内容,字符串或数组,key=value&形式
+    *        string cookie 携带cookie访问,该参数是cookie内容
+    *        string ip    如果该参数传入,$url将不被使用,ip访问优先
+    *        int    timeout 采集超时时间
+    *        bool   block 是否阻塞访问,默认为true
+    * @return mixed
+    */
+	
+  $code = trim($_GET['code']);
+  $client_id = '你的client_id';
+  $client_secret = '你的client_secret';
+  $token_url = "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/tokenservice";    
+  $postvals = "client_id=".$client_id
+      ."&client_secret=".$client_secret
+      ."&grant_type=authorization_code"
+      ."&code=".$code;
+	  
+	  
+  $response = $Http::fsockopenDownload($token_url,array(
+      'post' => $postvals,
+  ));   //请求第三方获取数据
+  
+  
+  
+===========================================================================================================================================================
+ 
+  ThinkPHP 行为 ; 类似于AOP编程中的“切面”的概念
+  
+    \ThinkPHP\Library\Behavior\AdBehavior.class.php    //调用位置
+	
+	AdBehavior.class.php  里的文件内容如下 
+	
+	--------------------------------------------------------
+	
+	namespace Behavior;
+	/**
+	* 行为扩展：代理检测
+	*/
+	class AdBehavior{
+		public function run(&$params) {
+			// 代理访问检测
+			
+				echo '我是一条'.$params['name'].'广告,'.$params['value'].'代言';        //在此介绍下，run必须的 ，细心的会在Think核心找到Behavior.class.php里面有这样一句操蛋的话  abstract public function run(&$params); 你懂的
+	
+		}
+	}
+	
+	--------------------------------------------------------
+	
+	
+	
+        Hook::add('Ad','Behavior\\AdBehavior');   		//注册行为(如果不想在方法中注册可以在\ThinkPHP\Mode\common.php 里的 'tags' 数组中注册一个行为)
+        $data=array('name'=>'AV','value'=>'老师'); 		//行为参数（注意：不能直接在行为执行时方法中放入数组参数，而是先要将参数数组赋值给一个变量在将变量数组调用不然"会报错"）
+        Hook::listen('Ad',$data);						//执行行为
+  
+  
+		输出结果为： 我是一条AV广告,老师代言
+		
+		
+		*还可以在模板中* 用标签 执行行为 {:tag('Ad', array('name'=>'AV','value'=>'*老师'))}
+		
+	
+	
+===========================================================================================================================================================
+ 		
+		    \ThinkPHP\Library\Think\Crypt\Driver\*.class.php   
+			
+	Base64 加密和解密
+	
+	在类上面 
+	use Think\Crypt\Driver\Base64;
+	
+	然后在方法里 ：
+	$Base64 = new Base64();
+	
+	或是直接在方法里，就不用在类上面 use 了 ：
+	$Base64 = new \Think\Crypt\Driver\Base64();
+     
+	/**
+     * 加密字符串
+     * @param string $str 字符串
+     * @param string $key 加密key
+     * @param integer $expire 有效期（秒）     
+     * @return string
+     */
+    $ggg= $Base64->encrypt('gggggggggggg','gjj');  //Base64 加密
+
+	echo $ggg.'<br/>';
+
+    /**
+     * 解密字符串
+     * @param string $str 字符串
+     * @param string $key 加密key
+     * @return string
+     */
+    $hhhh=$Base64->decrypt($ggg,'gjj');  		  //Base64 解密
+        
+	echo $hhhh;exit;	
+	
+	
+	// 输出：
+
+	�|����q�~|r�������ƣ�g���c���ۣr
+	gggggggggggg	
+		
+===========================================================================================================================================================
+ 
+	Crypt 加密实现类
+
+	在类上面 
+	use Think\Crypt\Driver\Crypt;
+	
+	然后在方法里 ：
+	$Base64 = new Crypt();
+	
+	或是直接在方法里，就不用在类上面 use 了 ：
+	
+	$Crypt = new \Think\Crypt\Driver\Crypt();
+
+
+    $encrypt= $Crypt->encrypt('gggggggggggg','gjj');  //Crypt 加密
+	
+	echo $encrypt.'<br/>';
+	
+    $decrypt= $Crypt->decrypt($encrypt,'gjj');  	 //Crypt 加密
+
+	echo $decrypt;
+	
+	//输出 ：
+	
+	kY1T3 ?=Sk96UgZ=c gao0Vb;8Wgdlk
+	gggggggggggg
+	
+===========================================================================================================================================================
+ 	
+	Des 加密实现类
+	
+	在类上面 
+	use Think\Crypt\Driver\Des;
+	
+	然后在方法里 ：
+	$Base64 = new Des();
+	
+	或是直接在方法里，就不用在类上面 use 了 ：
+	
+	$Des = new \Think\Crypt\Driver\Des();	
+	
+    $encrypt= $Des->encrypt('gggggggggggg','gjj');  //Des 加密	
+	
+	echo $encrypt.'<br/>';
+	
+    $decrypt= $Des->decrypt($encrypt,'gjj');  	 //Des 加密	
+	
+	echo $decrypt;
+
+	//输出 ：	
+	�#��s�ջ�������~�YC
+	gggggggggggg
+	
+===========================================================================================================================================================
+ 	
+ 
+ 	Base64 加密和解密
+	
+		在类上面 
+	use Think\Crypt\Driver\Think;
+	
+	然后在方法里 ：
+	$Base64 = new Think();
+	
+	或是直接在方法里 new ，就不用在类上面 use 了 ：
+	
+    $Think = new \Think\Crypt\Driver\Think();
+     
+     $encrypt= $Think::encrypt('gggggggggggg','gjj');
+	 
+     echo $encrypt.'<br/>';
+	 
+     $decrypt=$Think::decrypt($encrypt,'gjj');
+	 
+     echo $decrypt;exit;
+        $this->display();	
+	
+	//输出 ：	
+	sHyisIKmca1-fHKwhICXnr6YxqONZ5injGOan5Hbo3I
+	gggggggggggg
+	
+	
+===========================================================================================================================================================
+	
+/**
+ * Xxtea 加密实现类
+ */	
+
+		在类上面 
+	use Think\Crypt\Driver\Xxtea;
+	
+	然后在方法里 ：
+	$Base64 = new Xxtea();
+	
+	或是直接在方法里 new ，就不用在类上面 use 了 ：
+	
+	 $Xxtea = new \Think\Crypt\Driver\Xxtea();
+     
+     $encrypt= $Xxtea::encrypt('gggggggggggg','gjj');
+	 
+     echo $encrypt.'<br/>';
+	 
+     $decrypt=$Xxtea::decrypt($encrypt,'gjj');
+	 
+     echo $decrypt;exit;
+	
+	//输出 ：
+
+	����L4P�#(*��s�uR��,~Z�&�
+	gggggggggggg	
+	
+	
+===========================================================================================================================================================
+		
+	 
+	 在  \ThinkPHP\Library\Think\Image\Driver   文件夹里有很多处理图片的类库
+	
+	
+===========================================================================================================================================================
+		
+	在类上面 
+	use Think\Log\Driver\File;
+	
+	然后在方法里 ：
+	$File = new File();
+
+	或
+	
+    $File = new \Think\Log\Driver\File();   // 是直接在方法里 new ，就不用在类上面 use 了
+	
+	
+	项目入口/logs/test.log
+	$encrypt= $File->write('gggggggggggg','./logs/test.log');
+	
+	// test.log 被写入格式
+	[ 2020-04-09T17:37:32+08:00 ] 127.0.0.1 /index.php/Home/MyTest/index
+	gggggggggggg
+	[ 2020-04-09T17:38:37+08:00 ] 127.0.0.1 /index.php/Home/MyTest/index
+	gggggggggggg
+	
+	
+	
+	
+	
+	
+	
+	
+	
