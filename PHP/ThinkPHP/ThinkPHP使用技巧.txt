@@ -1,0 +1,43 @@
+ThinkPHP5.0引入第三方类
+目录位置 是 从入口文件开始  extend\getID3\getid3\getid3.php
+import('getID3.getid3.getid3', EXTEND_PATH);
+$getid3 = new \getid3();
+
+
+
+mode=vedio, 
+collegeid=3, 
+name=直播测试304, 
+
+starttime=2020-04-10 20:00, 
+type=open_lecture, 
+
+key=KqHDDFrdJ2e7DfEwQIw
+
+=======================================================================================================================
+//ThinkPHP 3.2 验证；接收参数
+$data[
+    'name'=>input('name'),
+    'tel'=>input('tel'),
+    'address'=>input('address'),
+];
+
+$rule = [
+        'name'  =>  'require|max:25',
+        'tel'  =>  'require|min:11|max:11',
+        'address'  => 'require|chsAlphaNum',
+];
+$msg = [
+    'name.require' => '名称必须',
+    'name.max'     => '名称最多不能超过25个字符',
+    'tel.require'   => '手机号不能为空',
+    'tel.min'  => '请填写正确的手机号码',
+    'tel.max'  => '请填写正确的手机号码',
+    'address.require'=> '地址不能为空',
+    'address.chsAlphaNum'=> '地址只包括汉字、字母和数字',
+];
+$validate =  new Validate($rule,$msg);
+$result   = $validate->check($data);
+if($result !== true){
+    $this->return_json(E_ARGS,$validate->getError());
+}

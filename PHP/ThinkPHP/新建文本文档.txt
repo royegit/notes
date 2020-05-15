@@ -1,0 +1,4 @@
+ThinkPHP5.0引入第三方类
+目录位置 是 从入口文件开始  extend\getID3\getid3\getid3.php
+import('getID3.getid3.getid3', EXTEND_PATH);
+$getid3 = new \getid3();
