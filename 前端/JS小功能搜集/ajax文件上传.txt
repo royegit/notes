@@ -1,0 +1,27 @@
+
+ajax 文件上传
+
+var files = $('.layui-upload-file')[0];  //获取file 文件
+_this.token =res.replace(/\n|\r/g,"");
+var formdata = new FormData();   //formData ajax上传文件必须要包裹到formData里面去
+formdata.append('token', _this.token);   //请求参数token
+formdata.append('file', file);	         //把文件放进 formData里面去	
+formdata.append('fname', _this.fname);   //请求参数fname
+formdata.append('x:name', _this.xname);   //请求参数xname
+formdata.append('key', _this.key);   	  //请求参数key
+
+
+$.ajax({
+    url:"https://upload-z2.qiniup.com",   //请求地址
+    type:'post',
+    data: formdata,					      //formdata数据
+    cache: false,					      //ajax 发送文件请求是必须设置的参数
+    contentType:false,					  //ajax 发送文件请求是必须设置的参数
+    processData: false,					  //ajax 发送文件请求是必须设置的参数
+    success:function(res){
+        _this.token =res;
+
+    }
+});
+
+

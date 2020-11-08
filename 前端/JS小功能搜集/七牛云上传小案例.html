@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<!--<script src="./static/admin_static/lib/jquery/jquery.min.js">-->
+        <style>
+            table {
+                margin:0 25% auto; 
+                width:50%;
+                border-collapse: collapse;
+                padding: 2px 24px 2px 0px; 
+                table-layout:fixed; 
+            } 
+
+            table th, td {
+                border: 1px solid black;
+                height: 40px;
+             }
+            table tr td:first-child { width: 250px; }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin: 0px;
+            }
+
+            input[type="submit"] {
+                margin:auto; 
+                display:block; 
+            }
+            
+            ul {
+                margin:30px 25%; 
+                width:50%;
+            }
+        </style>
+    
+        <script type="application/javascript">
+		       function xmlhttp() {
+                var $xmlhttp;
+                if (window.XMLHttpRequest) {
+                    // code for IE7+, Firefox, Chrome, Opera, Safari
+                    $xmlhttp = new XMLHttpRequest();
+                } else {
+                    // code for IE6, IE5
+                    $xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                return $xmlhttp;
+            }
+
+            window.onload = function() {
+				var tokena="";
+				var xnamea="";
+				var fnamea="";
+				var xfilea="";
+                $xmlhttp = xmlhttp();
+                $xmlhttp.onreadystatechange = function() {
+                    if ($xmlhttp.readyState == 4) {
+                        if($xmlhttp.status == 200){
+                          tokena=   document.getElementById('id_token').value = $xmlhttp.responseText;
+                        } else {
+                            alert('get uptoken other than 200 code was returned')
+                        }
+                    }
+                }
+                //获取token 
+                $upTokenUrl = 'http://tp6admin.co/index.php/admin/index/getToken';
+                $xmlhttp.open('GET', $upTokenUrl, true);
+                $xmlhttp.send(); 
+
+				//七牛云空间地址
+                $bucketDomain = 'http://qj9us2gxd.hn-bkt.clouddn.com';
+                $file = document.getElementById('id_file');
+                $file.onchange = function(){
+                    $key = $file.value.split(/(\\|\/)/g).pop(); 
+					 xname=$key.split(/\./).shift();;
+
+                    fname     = document.getElementById('fname').value = $key;
+					key 	  = document.getElementById('key').value = $key;
+					xname  	  = document.getElementById('xname').value = xname;
+                    xfilea    = document.getElementById('id_file');
+                    $url      = document.getElementById('id_url')
+                    $url.href = $url.text = $bucketDomain + '/' + $key;
+                };
+            }; 
+        </script>
+    </head>
+    <title>小文件上传示例</title>
+    <h1 style="text-align: center;">上传一个小文件</h1>
+    <body>
+        <ul>
+            <li>Upload Token 是使用官方账号的<a href='https://portal.qiniu.com/setting/key'>AK</a>, <a href='https://portal.qiniu.com/setting/key'>SK</a>生成，空间为： devtest </li>
+            <li>空间 devtest 绑定的<a href='https://portal.qiniu.com/'>域名</a>是：77fxsr.com2.z0.glb.qiniucdn.com </li>
+        </ul>
+        <form action="https://upload-z2.qiniup.com" method="POST" enctype="multipart/form-data" >  
+            <table>
+                <tr>
+                    <td>Upload Token(<a href="">生成Token的代码</a>):</td>
+                    <td><input id="id_token" name="token" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>上传文件名:</td>
+                    <td><input id="fname" name="fname" type="text" /></td>
+                </tr>
+				<tr>
+                    <td>上传文件名:</td>
+                    <td><input id="xname" name="x:name" type="text" /></td>
+                </tr>
+				<tr>
+                    <td>上传文key:</td>
+                    <td><input id="key" name="key" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>上传后文件外链(<a href="http://developer.qiniu.com/docs/v6/api/overview/dn/security.html">外链规则</a>):</td>
+                    <td><a id="id_url" href=""/></a></td>
+                </tr>
+                <tr>
+                    <td>文件（小于4MB）:</td>
+                    <td><input id="id_file" name="file" type="file" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input  type="submit" value="上传"/></td>
+                </tr>
+            </table>
+        </form>  
+    </body>
+</html>
