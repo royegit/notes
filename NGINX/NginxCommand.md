@@ -58,6 +58,13 @@ kill -HUP 住进称号或进程号文件路径
 nginx: the configuration file /usr/local/nginx/nginx-1.15/nginx/conf/nginx.conf syntax is ok
 nginx: configuration file /usr/local/nginx/nginx-1.15/nginx/conf/nginx.conf test is successful
 ```
+或者
+
+```gherkin
+[root@ecs-7ca3 logs]# /usr/local/phpstudy/soft/nginx/nginx-1.15/nginx/sbin/nginx -t -c /usr/local/phpstudy/soft/nginx/nginx-1.15/nginx/conf/nginx.conf
+nginx: the configuration file /usr/local/phpstudy/soft/nginx/nginx-1.15/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/phpstudy/soft/nginx/nginx-1.15/nginx/conf/nginx.conf test is successful
+```
 
 #### Centos nginx 重启
 重启Nginx
