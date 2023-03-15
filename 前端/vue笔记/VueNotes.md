@@ -28,3 +28,4 @@ v-model绑定的值需要是一个数组，不能是空字符或者是其他的�
 `checkbox-group` 元素能把多个 checkbox 管理为一组，只需要在 Group 中使用 `v-mode` 绑定 `Array` 类型的变量即可。`el-checkbox` 的 `label` 属性是该 checkbox 对应的值，若该标签中无内容，则该属性也充当 checkbox 按钮后的介绍。`label` 与数组中的元素值相对应，如果存在指定的值则为选中状态，否则为不选中。
 
 #### checkbox-group 的属性
+![RUNOOB 图标](https://raw.githubusercontent.com/royegit/notes/master/%E5%89%8D%E7%AB%AF/vue%E7%AC%94%E8%AE%B0/image/20201022173034175.png "RUNOOB")
