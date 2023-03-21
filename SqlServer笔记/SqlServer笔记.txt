@@ -94,6 +94,6 @@ set IDENTITY_INSERT  PaymentDetails_sky  OFF;
 
 ====================================================================================================================
 
-Sql Server 添加索引
+Sql Server 添加索引语句
 
 CREATE INDEX idx_CompleteDate ON SysRePayment (CompleteDate)
