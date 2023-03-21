@@ -90,3 +90,10 @@ SqlServer 新增一条自定义主键，（当有一条数据需要修改自增�
 SET IDENTITY_INSERT PaymentDetails_sky ON;
 INSERT PaymentDetails_sky (Id,ControlNumber,ApplyNO) values(16772097452148161311005911,110059117,'167720974521481613');
 set IDENTITY_INSERT  PaymentDetails_sky  OFF;
+
+
+====================================================================================================================
+
+Sql Server 添加索引
+
+CREATE INDEX idx_CompleteDate ON SysRePayment (CompleteDate)
