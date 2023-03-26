@@ -1,4 +1,7 @@
 # Linux 操作命令
+
+[Linux 命令搜索,有详细的命令使用说明](https://jaywcjlove.gitee.io/linux-command/)
+
 #### 常用到的命令
 
 查看 Linux 当前的连接数
