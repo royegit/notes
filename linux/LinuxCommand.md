@@ -20,7 +20,7 @@ bash-5.1# netstat -n|grep ESTAB|wc -l
 ```
 两条命令一样的效果，ss 比 netstat 好用的socket统计信息,但是有的时候有的linux 系统不一定有 ss 这个命令
 
-##### pgrep
+## pgrep
 
 根据用户给出的信息在当前运行进程中查找并列出符合条件的进程ID（PID）
 列出 nginx 所有的进程号
@@ -36,7 +36,7 @@ bash-5.1# netstat -n|grep ESTAB|wc -l
 3593371
 3593372
 ```
-##### free
+## free
 显示内存的使用情况
 ###### 选项
 * -s <间隔秒数> # 持续观察内存使用状况；
