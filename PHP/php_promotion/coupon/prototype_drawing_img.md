@@ -10,6 +10,7 @@
 * 指定商品 - 弹出所有产品窗口选择可使用优惠券的商品
 * 指定分类 - 现实联动下来框选择可以使用优惠券的商品分类
 
+* 价格百分比计算公式 ： 原价 x（1-10%）= 优惠10%
 
 
 ### 优惠券列表
@@ -59,4 +60,73 @@ CREATE TABLE `tp_coupon_list`  (
   INDEX `code`(`code`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 324 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+```
+
+```injectablephp
+/**
+ * 获取随机字符串
+ * @param int $randLength  长度
+ * @param int $addtime  是否加入当前时间戳
+ * @param int $includenumber   是否包含数字
+ * @return string
+ */
+function get_rand_str($randLength=6,$addtime=1,$includenumber=0){
+    if ($includenumber){
+        $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNPQEST123456789';
+    }else {
+        $chars='abcdefghijklmnopqrstuvwxyz';
+    }
+    $len=strlen($chars);
+    $randStr='';
+    for ($i=0;$i<$randLength;$i++){
+        $randStr.=$chars[rand(0,$len-1)];
+    }
+    $tokenvalue=$randStr;
+    if ($addtime){
+        $tokenvalue=$randStr.time();
+    }
+    return $tokenvalue;
+}
+
+```
+
+```injectablephp
+    /**
+     * 领券
+     * @param $id 优惠券id
+     * @param $user_id
+     */
+    public function get_coupon($id, $user_id)
+    {
+        if (empty($id)){
+            $return = ['status' => 0, 'msg' => '参数错误'];
+        }
+        if ($user_id) {
+            $_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : url('Home/Activity/coupon_list');
+            $coupon_info = Db::name('coupon')->where(array('id' => $id, 'status' => 1))->find();
+            if (empty($coupon_info)) {
+                $return = ['status' => 0, 'msg' => '活动已结束或不存在，看下其他活动吧~','return_url'=>$_SERVER['HTTP_REFERER']];
+            } elseif ($coupon_info['send_end_time'] < time()) {
+                //来晚了，过了领取时间
+                $return = ['status' => 0, 'msg' => '抱歉，已经过了领取时间','return_url'=>$_SERVER['HTTP_REFERER']];
+            } elseif ($coupon_info['send_num'] >= $coupon_info['createnum'] && $coupon_info['createnum'] != 0) {
+                //来晚了，优惠券被抢完了
+                $return = ['status' => 0, 'msg' => '来晚了，优惠券被抢完了','return_url'=>$_SERVER['HTTP_REFERER']];
+            } else {
+                if (Db::name('coupon_list')->where(array('cid' => $id, 'uid' => $user_id))->find()) {
+                    //已经领取过
+                    $return = ['status' => 2, 'msg' => '您已领取过该优惠券','return_url'=>$_SERVER['HTTP_REFERER']];
+                } else {
+                    $data = array('uid' => $user_id, 'cid' => $id, 'type' => 2, 'send_time' => time(),'status'=>0);
+                    Db::name('coupon_list')->insert($data);
+                    Db::name('coupon')->where(array('id' => $id, 'status' => 1))->inc('send_num')->update();
+                    $return = ['status' => 1, 'msg' => '恭喜您，抢到' . $coupon_info['money'] . '元优惠券!','return_url'=>$_SERVER['HTTP_REFERER']];
+                }
+            }
+        } else {
+            $return = ['status' => 0, 'msg' => '请先登录','return_url'=>url('User/login')];
+        }
+        
+        return $return;
+    }
 ```
