@@ -12,7 +12,7 @@
 
 
 ### 服务器下载工具
-[服务器端下载工具，一天24小时不间断下载。](https://blog.csdn.net/svap1/article/details/80450539)
+[linux的下载利器——aira2 可以下载磁力链接 24 小时下载。aira2 ](https://blog.csdn.net/svap1/article/details/80450539)
 
 
 ### chatGPT 

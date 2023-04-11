@@ -130,3 +130,77 @@ function get_rand_str($randLength=6,$addtime=1,$includenumber=0){
         return $return;
     }
 ```
+
+```injectablephp
+/**
+ * 根据用户发放优惠券 
+ */
+    public function send_coupon(){
+    	$cid = input('cid/d');
+    	if(IS_POST){
+    		$level_id = input('level_id');
+    		$user_id = input('user_id/a');
+
+    		$insert = [];
+    		$coupon = Db::name('coupon')->where("id",$cid)->find();
+    		if($coupon['createnum']>0){
+    			$remain = $coupon['createnum'] - $coupon['send_num'];//剩余派发量
+    			if($remain<=0) $this->error($coupon['name'].'已经发放完了');
+    		}
+    		if(empty($user_id) && $level_id>=0){
+    			if($level_id==0){
+    				$user = Db::name('users')->where("is_lock",0)->select();
+    			}else{
+    				$user = Db::name('users')->where("is_lock",0)->where('level', $level_id)->select();
+    			}
+    			if($user){
+    				$able = count($user);//本次发送量
+    				if($coupon['createnum']>0 && $remain<$able){
+    					$this->error($coupon['name'].'派发量只剩'.$remain.'张');
+    				}
+    				foreach ($user as $k=>$val){
+    					$time = time();
+                        $insert[] = ['cid' => $cid, 'type' => 1, 'uid' => $val['user_id'], 'send_time' => $time];
+                        $user_id[] = $val['user_id']; //用于通知消息
+    				}
+    			}
+    		}else{
+    			$able = count($user_id);//本次发送量
+    			if($coupon['createnum']>0 && $remain<$able){
+    				$this->error($coupon['name'].'派发量只剩'.$remain.'张');
+    			}
+    			foreach ($user_id as $k=>$v){
+    				$time = time();
+                    $insert[] = ['cid' => $cid, 'type' => 1, 'uid' => $v, 'send_time' => $time];
+    			}
+    		}
+			DB::name('coupon_list')->insertAll($insert);
+            // 通知消息
+            $messageFactory = new MessageFactory();
+            $messageLogic = $messageFactory->makeModule(['category' => 0]);
+            $messageLogic->getCouponNotice($cid, $user_id);
+
+            // 如果有微信公众号 则推送一条消息到微信.微信浏览器才发消息，否则下单超时。by清华
+//            if(is_weixin()){
+//                $user_id = ['3661','3645'];
+                $user = Db::name('OauthUsers')->where(['user_id'=>['in',$user_id] , 'oauth'=>'weixin' , 'oauth_child'=>'mp'])->select();
+                if ($user) {
+                    $wx_content = "您刚刚收到了优惠券，请注意查收";
+                    $wechat = new WechatUtil();
+                    foreach ($user as $v)
+                    {
+                        $wechat->sendMsg($v['openid'], 'text', $wx_content);
+                    }
+                }
+//            }
+			Db::name('coupon')->where("id",$cid)->inc('send_num',$able)->update();
+			adminLog("发放".$able.'张'.$coupon['name']);
+			$this->success("发放成功");
+			exit;
+    	}
+    	$level = Db::name('user_level')->select();
+    	View::assign('level',$level);
+    	View::assign('cid',$cid);
+    	return View::fetch();
+    }
+```
