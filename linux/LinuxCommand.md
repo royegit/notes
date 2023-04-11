@@ -36,6 +36,17 @@ bash-5.1# netstat -n|grep ESTAB|wc -l
 3593371
 3593372
 ```
+
+## fuser
+查询80端口被占用然后杀死占用的进程
+>$ fuser -v -n tcp 80
+
+```clickhouse
+[root@hostc3a924586b /]# fuser -v -n tcp 80
+                     USER        PID ACCESS COMMAND
+80/tcp:              root        823 F.... nginx
+                     www         825 F.... nginx
+```
 ## free
 显示内存的使用情况
 ###### 选项
@@ -59,6 +70,16 @@ Swap:            0B          0B          0B
 Mem:           15Gi       7.0Gi       379Mi       1.1Gi       8.1Gi       7.1Gi
 Swap:            0B          0B          0B
 ```
+## du 
+
+统计某个文件夹的大小 比如统计 `website` 文件夹的大小
+> du -sh website |sort -rh
+
+```clickhouse
+[root@hostc3a924586b /]# du -sh website |sort -rh
+30G     website
+```
+
 #### CPU占用最多的前10个进程
 
 >$ ps auxw|head -1;ps auxw|sort -rn -k3|head -10
