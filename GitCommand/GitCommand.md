@@ -737,7 +737,30 @@ cd existing_git_repo
 git remote add origin https://gitee.com/roye/admin-demo.git
 git push -u origin "master"
 ```
-## 已有仓库?
+#  撤回远程仓库撤回到某个版本
+
+## 本地操作
+
+不删除工作空间改动代码，撤销commit，不撤销 git add .
+git reset --soft xxx---版本号---xxxx
+>$ git reset --soft 772300228f05760f1d56259b21929971fde6c99f
+
+ 删除工作空间改动代码，撤销commit，撤销git add . 注意完成这个操作后，就恢复到了上一次的commit状态。
+`git reset --hard xxx---版本号---xxxx`
+
+> git reset --hard 772300228f05760f1d56259b21929971fde6c99f
+
+ 通过git push origin master –force强制提交当前版本号，以达到撤销仓库远程版本号的目的。
+
+>$ git push origin master -f
+
+## 服务器(生产环境)操作
+ 然后在远程服务器这样操作（放弃本地更改强制本地代码与远程仓库一致）
+```
+git fetch --all
+git reset --hard origin/master
+git pull   // 这一步为了同步远程代码，不需要的话可不执行
+```
 
 ## 相关资料
 * [githug](https://github.com/Gazler/githug)
