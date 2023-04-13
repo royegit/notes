@@ -737,7 +737,7 @@ cd existing_git_repo
 git remote add origin https://gitee.com/roye/admin-demo.git
 git push -u origin "master"
 ```
-#  撤回远程仓库撤回到某个版本
+#  撤回远程仓库到某个版本
 
 ## 本地操作
 
