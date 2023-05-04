@@ -116,4 +116,54 @@ Enter 1 or 2: 2
 Please enter your email address: i@laobuluo.com
 ```
 
-![LNMP](https://raw.githubusercontent.com/royegit/notes/master/PHP/php_promotion/coupon/images/Quicker_20230330_141243.png)
+![LNMP](https://raw.githubusercontent.com/royegit/notes/master/NGINX/images/lnmp-ssl-1.jpg)
+
+我们根据提示填写要设置SSL证书的域名、网站路径。因为我们是要给已有网站添加SSL证书，所以要确认好当前域名已经添加站点，以及当前网站的目录，这里我就不用购买的SSL证书，而是用免费 Let's Encrypt证书。最后，我们就等待自动安装执行。
+
+![LNMP](https://raw.githubusercontent.com/royegit/notes/master/NGINX/images/lnmp-ssl-2.jpg)
+
+看到这个表示已经安装完毕。
+
+### 第三、检查SSL证书是否生效
+
+
+![LNMP](https://raw.githubusercontent.com/royegit/notes/master/NGINX/images/lnmp-ssl-3.jpg)
+
+我们去浏览器地址栏输入HTTPS格式网址打开看看，看到上面已经带有绿标的 Let's Encrypt证书生效。而且不用我们手动续约，每个7天会自动检测一次帮助我们续约证书。
+
+### 第四、强制HTTPS地址访问
+
+这里我们发现一个问题，默认并不是强制HTTP访问HTTPS的，我们肯定需要强制跳转过去。
+
+1、修改位置
+
+>$ /usr/local/nginx/conf/vhost
+
+找到对应站点配置文件。
+
+2、添加强制HTTPS脚本
+
+>$ if ($ssl_protocol = "") { return 301 https://$host$request_uri; }
+
+脚本添加到配置文件80模块区域中。
+
+![LNMP](https://raw.githubusercontent.com/royegit/notes/master/NGINX/images/lnmp-ssl-4.jpg)
+
+3、重启Nginx
+
+>$ lnmp nginx reload
+
+生效之后我们再去打开网站，就可以强制以HTTPS形式访问网站。
+
+### 第五、LNMP添加SSL证书小结
+
+1、LNMP一键包目前自带添加站点的时候可选安装SSL证书或者免费Let's Encrypt证书；
+
+2、我们也可以在没有添加SSL证书已经运行的网站，不动网站数据前提下单独添加SSL证书，不会影响网站运行。
+
+3、添加SSL证书之后，我们需要手动设置Nginx配置，强制HTTPS访问。
+
+
+
+
+
