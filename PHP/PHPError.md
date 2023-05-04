@@ -15,3 +15,8 @@ Fatal error: require(): Failed opening required '/www/wwwroot/zhuyuyun/public/..
 #### 解决方案
 
 在Nginx 配置文件中找到 `fastcgi.conf` 文件 ，然后在文件中找到 `fastcgi_param PHP_ADMIN_VALUE "open_basedir=$document_root/:/tmp/:/proc/";` 修改成你网站的根目录；把 `$document_root` 改成 `/www/wwwroot/zhuyuyun` 即可，同时注释掉`php.ini`中的`open_basedir;`
+
+
+#### 啊宝塔/小皮遇到这样的问题，的解决方案更简单
+
+在 网站设置->网站目录 中找到 “防跨站攻击open_basedir” 的勾去掉即可
