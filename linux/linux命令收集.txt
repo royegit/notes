@@ -366,7 +366,7 @@ Removed symlink /etc/systemd/system/multi-user.target.wants/firewalld.service.
 Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
 
 
-firewall-cmd --permanent --zone=public --add-port=52115/tcp		#防火墙开启52115端口
+firewall-cmd --permanent --zone=public --add-port=28932/tcp		#防火墙开启52115端口
 
 
 curl -sS https://getcomposer.org/installer | PHP
@@ -406,7 +406,7 @@ Swap:          1.0G        648M        375M
 Mem:           587M        344M        121M        712K        120M        153M
 Swap:          1.0G        648M        375M
 
-
+telnet 34.125.20.111 28932
 
 Mem  行(第二行)系统物理内存的使用情况。
 Swap 行(第三行)swap交换内存的使用情况。
