@@ -30,6 +30,7 @@ v-model绑定的值需要是一个数组，不能是空字符或者是其他的�
 #### checkbox-group 的属性
 ![RUNOOB 图标](https://raw.githubusercontent.com/royegit/notes/master/%E5%89%8D%E7%AB%AF/vue%E7%AC%94%E8%AE%B0/image/20201022173034175.png "RUNOOB")
 
+
 ## Vue实现点击表格单元格出现输入框，失去焦点隐藏输入框功能
 
 #### Vue实现点击表格单元格出现输入框，失去焦点隐藏输入框功能
@@ -139,5 +140,12 @@ export default {
     }
 }
 </script>
-
 ```
+
+## vue element-ui table点击编辑后，变成input、select、date
+
+vue
+33 篇文章1 订阅
+订阅专栏
+最近，在项目上需要table可以行内编辑，在table添加了input、select、时间控件，并且可以保存本行数据，当你点击编辑时，table的列就会变成相对应的input、select和时间控件，点击保存时，需要调用后台接口把本行的数据传个后台。
+
