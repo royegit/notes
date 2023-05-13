@@ -29,3 +29,10 @@ v-model绑定的值需要是一个数组，不能是空字符或者是其他的�
 
 #### checkbox-group 的属性
 ![RUNOOB 图标](https://raw.githubusercontent.com/royegit/notes/master/%E5%89%8D%E7%AB%AF/vue%E7%AC%94%E8%AE%B0/image/20201022173034175.png "RUNOOB")
+
+## Vue实现点击表格单元格出现输入框，失去焦点隐藏输入框功能
+
+#### Vue实现点击表格单元格出现输入框，失去焦点隐藏输入框功能
+
+效果如下：
+![RUNOOB 图标](https://raw.githubusercontent.com/royegit/notes/master/%E5%89%8D%E7%AB%AF/vue%E7%AC%94%E8%AE%B0/image/20201022173034175.png "RUNOOB")
