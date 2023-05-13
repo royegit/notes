@@ -149,3 +149,140 @@ vue
 订阅专栏
 最近，在项目上需要table可以行内编辑，在table添加了input、select、时间控件，并且可以保存本行数据，当你点击编辑时，table的列就会变成相对应的input、select和时间控件，点击保存时，需要调用后台接口把本行的数据传个后台。
 
+![RUNOOB 图标](https://raw.githubusercontent.com/royegit/notes/master/%E5%89%8D%E7%AB%AF/vue%E7%AC%94%E8%AE%B0/image/d1e3ccb58ef740da8f8e63e5dc56238c.png "RUNOOB")
+
+```vue
+<template>
+    <div class="Table" style="width:80%; margin:0 auto;">
+      <el-table :data="prototypes" style="width: 100%;">
+        <!-- 序号栏目 type="index" -->
+        <el-table-column 
+          fixed
+          type="index" 
+          label="序号" 
+          width="100"
+        >
+        </el-table-column>
+        <el-table-column
+          fixed
+          prop="name"
+          label="姓名"
+          width="120"
+        >
+        </el-table-column>
+        <!-- 此页重点部分  编辑之前以span形式显示，点击编辑之后，以input栏目显示 -->
+        <el-table-column label="地址" width="380">
+          <template slot-scope="scope">
+            <span v-if="scope.row.vVisible">{{scope.row.city}}</span>
+            <el-input v-else v-model="scope.row.city"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="性别" width="380">
+          <template slot-scope="scope">
+            <span v-if="scope.row.vVisible">
+              <span v-if="scope.row.sex == '0'">
+                男
+              </span>
+              <span v-else>
+                女
+              </span>
+            </span>
+            <el-select v-else v-model="scope.row.sex" clearable  >
+              <el-option
+                v-for="item in sexes"
+                :key="item.value"
+                :label="item.text"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="日期" width="380">
+          <template slot-scope="scope">
+            <span v-if="scope.row.vVisible">{{scope.row.dateValue}}</span>
+            <el-date-picker
+              v-else
+              v-model="scope.row.dateValue"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="160">
+          <template slot-scope="scope">
+            <div class="special">
+              <span v-if="scope.row.vVisible" class="items" @click="edit(scope.row)">编辑</span>
+              <span v-else class="items" @click="edit(scope.row)">保存</span>
+              <span>|</span>
+              <span class="items" @click="deleteit(scope.row)">删除</span>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+</template>
+  
+  <script>
+  export default {
+    data() {
+        return{
+            // 表格绑定的数据
+            prototypes:[{
+                name: '王小虎',
+                city: '北京朝阳',
+                sex:"0",
+                dateValue:"2022-10-24",
+                isNull: false,
+                vVisible: true
+            },{
+                name: '李晓琪',
+                city: '北京东城',
+                sex:"1",
+                dateValue:"2022-10-25",
+                isNull: true,
+                vVisible: true
+            }, {
+                name: '张小民',
+                city: '北京西城',
+                sex:"0",
+                dateValue:"2022-10-26",
+                isNull: true,
+                vVisible: true
+            }],
+            sexes:[
+              {
+                text:'男',
+                value:'0'
+              },{
+                text:'女',
+                value:'1'
+              }
+            ],
+        }
+    },
+    methods: {
+        // 点击编辑按钮
+        edit(row) {
+            row.vVisible = !row.vVisible
+            console.log(row)
+        },
+        // 点击删除按钮
+        deleteit(row) {
+
+        }
+    }
+  }
+</script>
+<style scoped>
+.special{
+  cursor: pointer;
+}
+.special .items:hover{
+  color: #6fbaff;
+}
+</style>
+```
