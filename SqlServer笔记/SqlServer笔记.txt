@@ -97,3 +97,8 @@ set IDENTITY_INSERT  PaymentDetails_sky  OFF;
 Sql Server 添加索引语句
 
 CREATE INDEX idx_CompleteDate ON SysRePayment (CompleteDate)
+
+
+====================================================================================================================
+Sql Server 查看是否有锁表语句
+select request_session_id spid,OBJECT_NAME(resource_associated_entity_id) tableName from sys.dm_tran_locks where resource_type='OBJECT'
