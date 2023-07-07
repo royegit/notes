@@ -49,3 +49,10 @@ $orders = Order::whereHas('products', function ($query) {
 这将返回所有无法关联到Category模型的Order模型实例。
 
 希望这可以帮助你完成模型嵌套预加载条件查询以获取嵌套模型数据为空的数据。
+
+#### 宿主机连接Docker服务器地址
+```injectablephp
+DB_HOST=host.docker.internal #本地 - 映射本地IP
+DB_USERNAME=sa
+DB_PASSWORD=123456
+```

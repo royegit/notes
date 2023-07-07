@@ -124,3 +124,10 @@ c3fe7de823c4   e0d7e8530099   "/bin/sh"   7 months ago   Up 2 hours   0.0.0.0:95
 删除容器使用 docker rm 命令：
 
 >$ docker rm -f c3fe7de823c4
+
+#### 宿主机连接Docker服务器地址
+```injectablephp
+DB_HOST=host.docker.internal #本地 - 映射本地IP
+DB_USERNAME=sa
+DB_PASSWORD=123456
+```
