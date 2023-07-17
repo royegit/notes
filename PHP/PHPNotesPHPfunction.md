@@ -87,4 +87,19 @@ $ggg=file_get_contents('http://i.tianqi.com/index.php?c=code&id=7');
 echo $ggg;exit;
 ```
 
+### centos如何启动php
+#### centos7启动php：
 
+重启：systemctl restart php-fpm.service
+
+开启：systemctl start php-fpm.service
+
+关闭：systemctl stop php-fpm.service
+
+centos6启动php：
+
+重启：service php-fpm restart
+
+开启：service php-fpm start
+
+关闭：service php-fpm stop
