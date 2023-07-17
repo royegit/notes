@@ -96,7 +96,7 @@ echo $ggg;exit;
 
 关闭：systemctl stop php-fpm.service
 
-centos6启动php：
+#### centos6启动php：
 
 重启：service php-fpm restart
 
