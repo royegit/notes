@@ -762,6 +762,12 @@ git reset --hard origin/master
 git pull   // 这一步为了同步远程代码，不需要的话可不执行
 ```
 
+### 本地误操作删除某个文件想要撤销删除时
+
+> git checkout -- app\Controller\OrderController.php
+
+注意：-- 很重要，如果没有 -- 的话，那么命令变成创建分支了。
+
 ## 相关资料
 * [githug](https://github.com/Gazler/githug)
 * [learnGitBranching](https://github.com/pcottle/learnGitBranching)
