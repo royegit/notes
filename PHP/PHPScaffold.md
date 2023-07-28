@@ -16,7 +16,7 @@
     {
         $Country = env('Country');
         if (empty($date)) {
-            $date = time();
+            return '';
         }
         if (is_string($date)) {
             $time = explode('.',$date);
@@ -76,4 +76,42 @@
         ];
         return date($CountryArray[$Country][$format], $date);
     }
+```
+
+#### 比较一个数组是否包含了另外一个数组所有的值
+
+```injectablephp
+    /**
+     * 比较一个数组是否包含了另外一个数组所有的值
+     * @param array $arrayV1
+     * @param array $arrayV2
+     * IsComplianceArray
+     * author  roye
+     * datetime 2023/7/28 9:38
+     * return bool
+     */
+    public function IsComplianceArray(array $arrayV1,array $arrayV2):bool
+    {
+        if(count($arrayV2)==count(array_intersect($arrayV1, $arrayV2)))
+        {
+            return true;
+        };
+        return false;
+    }
+```
+**例：**
+```injectablephp
+$a1=array("a"=>"red","b"=>"green","c"=>"blue","d"=>"yellow");
+$a2=array("e"=>"red","f"=>"green","g"=>"blue");
+
+$result=array_intersect($a1,$a2);
+print_r($result);exit;
+
+#以$a2为准，返回在$a1中所有和$a2相同的值。
+Array
+(
+    [a] => red
+    [b] => green
+    [c] => blue
+)
 ```
