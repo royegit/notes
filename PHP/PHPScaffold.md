@@ -18,9 +18,10 @@
         if (empty($date)) {
             return '';
         }
-        if (is_string($date)) {
-            $time = explode('.',$date);
-            $date = (int)strtotime($time[0]);
+        if (is_string($date)&&strlen($date)>19&&strstr($date, '.')) {
+            $date = (int)strtotime(substr_replace($date, '', strripos($date, '.')));
+        } else {
+            $date = (int)strtotime($date);
         }
         $time = '';
         if ($IsTime==true) {
