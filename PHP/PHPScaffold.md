@@ -34,12 +34,10 @@
         // 分割格式
         $DATE_SPLIT_HORIZONTAL = '-';
         $DATE_SPLIT_RIGHT_SLASH = '/';
-        $DATE_SPLIT_DROP = '.';
 
         $FORMAT_ARRAY = [
             $DATE_SPLIT_HORIZONTAL,
-            $DATE_SPLIT_RIGHT_SLASH,
-            $DATE_SPLIT_DROP
+            $DATE_SPLIT_RIGHT_SLASH
         ];
         if (!in_array($format, $FORMAT_ARRAY)) {
             $format = '-';
