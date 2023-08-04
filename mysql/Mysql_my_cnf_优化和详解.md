@@ -2,45 +2,12 @@
 # MySQL 优化思路
 
 ```mysql
-server-id = 371
-innodb_additional_mem_pool size = 16M
-innodb_buffer_pool_size = 2048M  # 主要是这个参数，一般可以配置到硬件的3分之一到2分之一（一些公司会设置到百分之八十，一般建议是不超过百分之五十 ）
-innodb_data_file_path = ibdatal: 1024M: autoextend
-innodb_file_io_threads = 41
-innodb_thread_concurrencv = &1
-innodb_flush_log_at_trx_commit= 21
-innodb_log_buffer_size== 16M
-innodb_log_file_size = 128M
-innodb_log_files_in_group=3
-innodb_max_dirty_pages_pct= 90
-innodb_lock_wait_timeout = 120
-innodb_file_per_table = 0
-[mysqldump]
-quick
-max allowed packet = 32M
-[mysqld safe]
-
-
 socket= /data/3306/mysql. sock
 basedir=/usr/local/mysql
 datadir =/data/3306/data
-open_files_limit= 10240
-back_log = 600
-max_connections = 3000
-max_connect_errors = 6000
-table_cache = 614
-external-locking = FALSE
-max_allowed_packet= 32M
 sort_buffer_size = 2M  # 线程buffer不能给大了
 join_buffer_size = 2M  # 线程buffer不能给大了
 thread_cache_size = 300  # 线程缓存不能给大了
-thread_concurrency = 8
-query_cache_size = 64M
-query_cache_limit = 4M
-query_cache min_res unit = 2k
-default_table_type = InnoDB
-thread_stack = 192K
-transaction isolation = READ-CONMITTED
 tmp_table_size = 256M        #临时表会占用磁盘空间，可以给大一点，但也不用给特别大
 max_heap_table_size = 256M       #临时表会占用磁盘空间，可以给大一点，但也不用给特别大
 long_query_time = 2         # 慢查询，查询时间最长的设置
@@ -154,13 +121,14 @@ MySQL打开的文件描述符限制，默认最小1024;当open_files_limit没有
 
 连接超时之前的最大秒数,在 Linux 平台上，该超时也用作等待服务器首次回应的时间
 
-<font color="#6495ed">wait-timeout = 28800</font>
+<font color="#6495ed">wait_timeout = 28800</font>
 
-等待关闭连接的时间
+等待关闭连接的时间（建议不要设置太大）
 
-<font color="#6495ed">interactive-timeout = 28800</font>
+<font color="#6495ed">interactive_timeout = 28800</font>
 
 关闭连接之前，允许 interactive_timeout（取代了wait_timeout）秒的不活动时间。客户端的会话 wait_timeout 变量被设为会话interactive_timeout 变量的值。如果前端程序采用短连接，建议缩短这2个值, 如果前端程序采用长连接，可直接注释掉这两个选项，默认配置(8小时)
+注意：（最好不要设置太大）
 
 <font color="#6495ed">slave-net-timeout = 600</font>
 
@@ -249,6 +217,7 @@ memlock # 如果你的系统支持 memlock() 函数,你也许希望打开此选�
 当创建新表时作为默认使用的表类型,如果在创建表示没有特别执行表类型,将会使用此值
 
 <font color="#6495ed">default-time-zone = system</font>
+
 服务器时区
 
 <font color="#6495ed">character-set-server = utf8</font>
@@ -349,8 +318,7 @@ general_log路径
 
 <font color="#6495ed">max_binlog_size = 1G</font>
 
-
-#如果二进制日志写入的内容超出给定值，日志就会发生滚动。你不能将该变量设置为大于1GB或小于4096字节。 默认值是1GB。如果你正使用大的事务，二进制日志还会超过max_binlog_size
+如果二进制日志写入的内容超出给定值，日志就会发生滚动。你不能将该变量设置为大于1GB或小于4096字节。 默认值是1GB。如果你正使用大的事务，二进制日志还会超过max_binlog_size
 
 <font color="#6495ed">max_relay_log_size = 1G</font>
 
@@ -473,6 +441,8 @@ InnoDB为独立表空间模式，每个数据库的每个表都会生成一个�
 设置InnoDB存储引擎用来存放数据字典信息以及一些内部数据结构的内存空间大小，所以当我们一个MySQL Instance中的数据库对象非常多的时候，是需要适当调整该参数的大小以确保所有数据都能存放在内存中提高访问效率的。
 
 <font color="#6495ed">innodb_buffer_pool_size = 2G</font>
+
+主要是这个参数，一般可以配置到硬件的3分之一到2分之一（一些公司会设置到百分之八十，一般建议是不超过百分之五十 ）
 
 包括数据页、索引页、插入缓存、锁信息、自适应哈希所以、数据字典信息.InnoDB 使用一个缓冲池来保存索引和原始数据, 不像 MyISAM.这里你设置越大,你在存取表里面数据时所需要的磁盘 I/O 越少.在一个独立使用的数据库服务器上,你可以设置这个变量到服务器物理内存大小的 80%,不要设置过大,否则,由于物理内存的竞争可能导致操作系统的换页颠簸.注意在 32 位系统上你每个进程可能被限制在 2-3.5G 用户层面内存限制,所以不要设置的太高.
 

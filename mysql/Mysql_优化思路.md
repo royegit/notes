@@ -12,73 +12,37 @@ raid 4块盘：RAID0 优于 RAID10 优于 RAID5 优于 RAID1。
 软件：mysql 编译的优化
 
 #### 2、my.cnf 里参数的优化
-优化幅度很小。大部分是架构的优化，以及SQL语句的优化。
-
-server-id = 371
-innodb_additional_mem_pool size = 16M
-innodb_buffer_pool_size = 2048M  # 主要是这个参数，一般可以配置到硬件的3分之一到2分之一（一些公司会设置到百分之八十，一般建议是不超过百分之五十 ）
-innodb_data_file_path = ibdatal: 1024M: autoextend
-innodb_file_io_threads = 41
-innodb_thread_concurrencv = &1
-innodb_flush_log_at_trx_commit= 21
-innodb_log_buffer_size== 16M
-innodb_log_file_size = 128M
-innodb_log_files_in_group=3
-innodb_max_dirty_pages_pct= 90
-innodb_lock_wait_timeout = 120
-innodb_file_per_table = 0
-[mysqldump]
-quick
-max allowed packet = 32M
-[mysqld safe]
-
-
-socket= /data/3306/mysql. sock
-basedir=/usr/local/mysql
-datadir =/data/3306/data
-open_files_limit= 10240
-back_log = 600
-max_connections = 3000
-max_connect_errors = 6000
-table_cache = 614
-external-locking = FALSE
-max_allowed_packet= 32M
-sort_buffer_size = 2M  # 线程buffer不能给大了
-join_buffer_size = 2M  # 线程buffer不能给大了
-thread_cache_size = 300  # 线程缓存不能给大了
-thread_concurrency = 8
-query_cache_size = 64M
-query_cache_limit = 4M
-query_cache min_res unit = 2k
-default_table_type = InnoDB
-thread_stack = 192K
-transaction isolation = READ-CONMITTED
-tmp_table_size = 256M        #临时表会占用磁盘空间，可以给大一点，但也不用给特别大
-max_heap_table_size = 256M       #临时表会占用磁盘空间，可以给大一点，但也不用给特别大
-long_query_time = 2         # 慢查询，查询时间最长的设置
-log_long_formaty
-log-error = /data/3306/error.log
-log-slow-queries=/data/3306/slow-log.log  # 查询时间超过2秒的记录到慢查询日志里
-pid-file = /data/3306/mysql. pid
-log-bin=/data/3306/mysql-bin
-relay-log=/data/3306/relay-binv
-relay-log-info-file = /data/3306/relay-log.infov
-binlog_cache_size = 4M
-max_binlog_cache_size = 8M
-max_binlog_size = 512M
-expire_logs_days = 7     # binlog 过期的天数(注意：平时不要手动去删除binlog,容易出问题)
-key_buffer_size = 32M    # 索引的缓存，主要用于myIson引擎
-read_buffer_size = 1Mb
-read_rnd_buffer_size = 16M
-bulk_insert_buffer_size = 64M
-myisam_sort_buffer size = 128M
-myisam_max_sort_file_size = 10G
-myisam_max_extra sort file size = 10G
-myisam_repair_threads = 1
-skip-name-resolve # 这个参数很重要不加入的话会导致很多莫名其妙的错误
+注意：my.cnf 里参数优化的幅度很小。大部分是架构的优化，以及SQL语句的优化。
+思想：
+监控：生产参数是一般情况下参数。
+命令：show global status\G;
+监控调试工具：mysqlreport ,通过它
+tuning-primer 工具
 
 
 #### 3、SQL语句的优化
+
+a、索引优化
+    1）白名单机制--百度，项目开发时DBA要及时参与，减少上线后慢SQL的数量。
+    抓出慢SQL，配置my.cnf
+    long_query_time = 2
+    log-slow-queries = /data/3306/slow-log.log
+    按天轮询：slow-log.log
+    
+     2) 慢查询日志分析工具---mysqlsla 最推荐的工具
+    mysqldumpslow,mysqlsla,myprofi,mysql-explain-slow-log,mysqllogfilter 比较
+    
+    3）每天晚上0点定时分析慢查询，发到核心开发，DBA分析，及高级运维，CTO的邮箱里。
+    DBA分析给出优化建议-->核心开发确认更爱-->DBA线上操作处理。
+
+b.大的复杂的SQL语句拆分成多个小的SQL语句。
+    子查询，JOIN连表查询，某个表4000万条数据记录时无论怎么优化都慢
+
+c. 数据库是存储数据的地方，但是不是计算数据的地方。
+    对数据计算，应用类处理，都要拿到前端应用解决。禁止在数据库上处理。
+
+d.搜索功能，like '%老男孩%'（也优化不了） ，一般不要用MySQL数据库，
+    
 
 #### 4、架构的优化
 #### 5、流程，制度，安全优化
