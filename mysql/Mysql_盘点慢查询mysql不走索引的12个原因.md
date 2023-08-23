@@ -4,20 +4,27 @@
 
 日常开发中，我们经常会遇到数据库慢查询。那么导致数据慢查询都有哪些常见的原因呢？今天田螺哥就跟大家聊聊导致MySQL慢查询的12个常见原因，以及对应的解决方法。
 
+![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/d447d795245dcc3a5f33c0d18fd303b7.png)
+
+
 #### 1. SQL没加索引
    很多时候，我们的慢查询，都是因为**没有加索引**。如果没有加索引的话，会导致全表扫描的。因此，应考虑在where的条件列，**建立索引**，尽量避免全表扫描。
 
 **反例：**
+```mysql
+select * from user_info where name ='捡田螺的小男孩公众号' ;
+```
 
->select * from user_info where name ='捡田螺的小男孩公众号' ;
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/bc4c2d68dd80f6a029f475931f318879.png)
 
 
 **正例:**
+```mysql
+// 添加索引  
+alter table user_info add index idx_name (name);
+```
 
->// 添加索引  
->alter table user_info add index idx_name (name);
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/6009163eb311e35042b66946b371c51d.png)
 
