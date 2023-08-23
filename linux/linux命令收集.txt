@@ -27,7 +27,7 @@ royel.top
 http://www.royel.top
 https://mp.weixin.qq.com/debug/
 
- 
+
 3509512229
 
 S&t!%6&ct!*^%!^&
@@ -69,10 +69,10 @@ git clone root@209.250.252.225:royeweb/laotai.git
 
 下载链接：https://pan.baidu.com/s/1bwfJi6MHuAY0fQmmD_uWIw
 分享密码：trnj
-解压密码：2696690555.COM 
+解压密码：2696690555.COM
 
 
-./configure --with-php-config=/usr/local/php/bin/php-config --enable-openssl  --enable-http2  --enable-sockets --enable-mysqlnd 
+./configure --with-php-config=/usr/local/php/bin/php-config --enable-openssl  --enable-http2  --enable-sockets --enable-mysqlnd
 
 
 
@@ -101,27 +101,27 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 
 
 
-		shift+o 在光标所在的行换行然后进入输入状态 
+		shift+o 在光标所在的行换行然后进入输入状态
 
 	linux 的基本操作
-	
+
 	安装 linux 之后需要的最基本的安装程序
 	yum install gcc gcc-c++ gcc-g77 flex bison autoconf automake bzip2-devel zlib-devel ncurses-devel libjpeg-devel libpng-devel libtiff-devel freetype-devel pam-devel openssl-devel libxml2-devel gettext-devel pcre-devel mysql-devel net-snmp-devel curl-devel perl-DBI
-	
+
 	egrep "log-bin|server-id" /data/3306/my.cnf   //在my.cnf文件中查询log-bin和server-id字符
-	
-	
+
+
 	 sync; echo 3 > /proc/sys/vm/drop_caches  //linux 回收内存
-	
+
 	SecureCRT 远程登录工具
 	xsell 	  远程登录工具
-	
+
 	df -h 查看磁盘挂载信息（report file system disk space usage）
 	du -sh 查看文件及目录大小
 	date 命令 -s 修改时间
 	time 计算一个任务执行时间
 	screen  后台运行命令
-	shutdown [选项] 时间  -c 取消前一个关机命令;-h now(关机) -r now(重启) 
+	shutdown [选项] 时间  -c 取消前一个关机命令;-h now(关机) -r now(重启)
 	rpm -qpi *.rpm  查看软件包里的内容
 	rpm -qpl *.rpm 查看软件包将会在系统里安装那些部分
 	mkdir  -p /tmp/japan/boduo #递归创建
@@ -134,8 +134,8 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	hostname #查看主机名
 	NETWORKING=yes
 	HOSTNAME=myhostname
-	[root@localhost ~]# reboot 
-	[root@myhostname ~]# 
+	[root@localhost ~]# reboot
+	[root@myhostname ~]#
 	cat -n /etc/issue  显示文件内容加行号
 	cut 按列切割 -d 指定分割符，-f 数字选列，-c 按字符
 	chomd 改变文件访问权限分为数字和字符表示法，-R 递归
@@ -154,15 +154,15 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	netstat -an 查看本机所有的网络连接
 	netstat -rn 查看本机路由表
 
-	
-	uname -a 查看linux系统所有内核相关信息 
+
+	uname -a 查看linux系统所有内核相关信息
 	uname -r  查看linux内核版本
 	uname -s  查看linux内核名称
 	file /bin/ls 查看linux系统的位数
 	fdisk 磁盘分区的命令 -l 查看列表小于2T 的分区工具。
 	last 查看目前和过期所有用户的登录信息
 	lastlog 查看用户上次登录的时间
-	lastlog -u 502  查看uid为 502的用户信息	
+	lastlog -u 502  查看uid为 502的用户信息
 	ll -i  /tmp  #查看硬链接：查看 i 的节点号查看是否为硬链接 ，如果系统中有两个文件的 i节点号是相同的则为同一个文件的硬链接
 	ls | wc -l    统计当前文件夹下有多少个文件，文件夹
 	ls -lh  可用显示文件大小以k或者M或者G的显示
@@ -170,7 +170,7 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	lsb_release -a  查看linux是用到red head 还是CentOS还是别的什么发行版本的操作系统
 	lsof [-c|-u|-p]  列出进程打开或使用的文件信息。-c 字符串：只列出一字符串开头的进程打开的文件；-u 用户名：只列出某个用户的进程打开的文件; -p pid：列出某个PID进程打开的文件
 	init 3 #从图形界面切换到命令界面
-	init 5 #切换到图形界面(前提是安装时有图形界面) 
+	init 5 #切换到图形界面(前提是安装时有图形界面)
 	rename ".HTML"  ".html" * #把.HTML改为*批量改成.html; *表示批量
 	reboot 重启(init 6)
 	mount 挂载的命令 -t 文件系统类型 -o挂载的选项 -a
@@ -189,42 +189,42 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	service network restart
 	tcpdump -nnn -s 10000|grep ICMP	#抓包
 	tcpdump -i eth0 -nnn -s 10000 'port 52115 and src host 10.0.0.27' #抓包
-	
+
 	echo $RANDOM|md5sum|cut -c 1-8  #生成随机数并进行md5加密然后截取八位数
 	echo $(($RANDOM+11111111))  	#生成8位随机数
 	openssl rand -base64 8			#生成8位随机数
 	date +%s%N						#生成随机数
-	
+
 	[root@localhost ~]# a="I am gggggg."   #定义变量a并赋值
 	[root@localhost ~]# echo ${#a}         #计算a变量的长度
-	[root@localhost ~]# echo ${a}|wc -L    #计算a变量的长度 
+	[root@localhost ~]# echo ${a}|wc -L    #计算a变量的长度
 	[root@localhost ~]# expr length "${a}" #计算a变量的长度
-	
+
 【必要的软件安装】
 	 yum install tree -y  #tree 安装
-	
+
 	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-	
+
 	服务器的压力测试的安装与使用
-	
+
 	yum -y install http-tools
 	ab -n 100 -c 100 http://localhost   对apache 或 nginx 的压力测试 同一时间内100的点击量
-	
+
 	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-	
+
 	linux 定义命令别名
-	
-	vim 打开 /root/.bashrc 
-	[root@localhost extra]# vim /root/.bashrc 
+
+	vim 打开 /root/.bashrc
+	[root@localhost extra]# vim /root/.bashrc
 
 	配置apache的启动和关闭的命令
-	
+
 	------------------------------------------------------------------------
 	# .bashrc
 
 	# User specific aliases and functions
-	
+
 	alias rm='rm -i'
 	alias cp='cp -i'
 	alias mv='mv -i'
@@ -234,20 +234,20 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	if [ -f /etc/bashrc ]; then
 			. /etc/bashrc
 	fi
-	~            
+	~
 	------------------------------------------------------------------------
-	
+
 	注意：定义命令别名不能与系统命令重名不然系统命令失效
-	
-	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
-	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
-	
+
+	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
 	挂载光盘到硬盘
 	mkdir -p /mnt/cdrom
-	chmod 777 /mnt 
-	mount -t iso9660 /dev/cdrom  /mnt/cdrom 
-	
-	配置 /etc/yum.repos.d/server.repo 
+	chmod 777 /mnt
+	mount -t iso9660 /dev/cdrom  /mnt/cdrom
+
+	配置 /etc/yum.repos.d/server.repo
 	[cdrom]
 	name=cdrom
 	baseurl=file://mnt/cdrom
@@ -256,30 +256,30 @@ LD_LIBRARY_PATH=/usr/local/libmcrypt/lib:/usr/local/lib    ./configure --with-li
 	yum clean all
 	查看yum 信息
 	yum list
-	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+	&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-	
-	
+
+
 	history | grep cp           //搜索历史纪录关键词
 	history | grep sersync
 ===================================================================================================
 	linux 增量备份
-	
+
 	rsync -azv --delete ./test/*  /data/wap_zouba/
-	
-	
+
+
 	grep -rn 'latarcyrheb' *    //在文件夹内查找那个文件里有latarcyrheb这个字符串
-	
+
 	rpm -ql rsync    			//找rsync软件安装的文件目录
-	
+
 	rpm -qa rsync  				//查看rsync 是否安装
-	
+
 	DST：目的地址
-	
+
 	SRC：原地址
-	
-	
-	
+
+
+
 	ty_store_smg_setting
 
 ==========================================================================================================
@@ -300,7 +300,7 @@ rpm -ev MySQL-client-5.5.25-1.rhel5 --nodeps 强制卸载
 
 
 mysql-bin.0000*日志是用于分布式同步使用的，如果只有一台机器完全可以关闭该日志
-vim /etc/my.cnf 
+vim /etc/my.cnf
 注释 #log-bin=mysql-bin 即可
 
 ps -ef|grep mysqld 查看mysqld进程
@@ -313,7 +313,7 @@ mysqlbinlog  --on-debaults  ../data/mysql-bin.000001  查看msyql日志
 =======================================================================================================================================
 
 
-			
+
 ==========================================================================================================================================
 paragraph     				段落
 Decrease Heading Level     	减少标题级别
@@ -322,9 +322,9 @@ Table             		    表单
 Code Fences       		    代码栅栏
 Math Block        		    重点
 Quote 			  		    引用
-Ordered List      		    有序列表			
+Ordered List      		    有序列表
 Unordered List    		    无序列表
-task list         		    任务列表			
+task list         		    任务列表
 Link Reference    		    插入URL连接
 Footnotes         		    注释
 Horizontal Line   		    水平线
@@ -333,10 +333,10 @@ clear format      		    清除格式
 
 =============================================================================================================================================
 
-linux 开启和关闭防火墙  关闭 SElinux 
+linux 开启和关闭防火墙  关闭 SElinux
 
 
-###关闭 SElinux 
+###关闭 SElinux
 
 vim /etc/selinux/config打开selinux配置文件
 修改 SELINUX=disabled  之后
@@ -420,5 +420,8 @@ available 列显示还可以被应用程序使用的物理内存大小。
 
 
 
+# 解压当前目录下的所有 *.tar.gz 压缩文件
+
+for n in `ls *.gz`;do docker load -i $n ;done
 
 

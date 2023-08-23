@@ -180,3 +180,32 @@ public function isRobot() {
         }
     }
 ```
+
+#####  Referer检测
+Referer是指请求来源的URL地址。可以通过检测Referer信息来判断请求是否来自于正常的网站访问。如果Referer信息为空或者不正确，则很可能是爬虫攻击。下面是一个简单的PHP代码示例：
+
+```injectablephp
+<?php
+$referer =$_SERVER['HTTP_REFERER'];if (empty($referer)||12get_referer($referer,'')!==0){    header('HTTP/1.1 403 Forbidden');    exit();}
+
+function get_referer(){
+$url = $_SERVER["HTTP_REFERER"]; //获取完整的来路URL
+$str = str_replace(“http://”,””,$url); //去掉http://
+$strdomain = explode(“/”,$str); // 以“/”分开成数组
+$domain = $strdomain[0]; //取第一个“/”以前的字符
+return $domain;
+}
+ 
+//对于百度、谷歌搜索引擎来路判断
+function get_seo(){
+$s = 0;
+if(strstr(get_referer(),'baidu.com')){
+$s = 1;
+}
+else if(strstr(get_referer(),'google.com.hk')){
+$s = 1;
+}
+return $s;
+?>
+
+```
