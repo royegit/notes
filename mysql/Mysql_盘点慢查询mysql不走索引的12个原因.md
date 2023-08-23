@@ -48,13 +48,15 @@ userId字段为**字串类型**，是B+树的普通索引，如果查询条件�
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/b0ac726d4df26eee8144b58ec07ab6cf.png)
 
-如果给数字加上'',也就是说，传的是一个字符串呢，当然是走索引，如下图：
+如果给数字加上'',也就是说，传的是一个字符串呢，**当然是走索引**，如下图：
 
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/8fb8e8834afcc210f6a5fd0ffb026d23.png)
 
 
+
 >为什么第一条语句**未加单引号就不走索引**了呢？这是因为不加单引号时，是字符串跟数字的比较，它们类型不匹配，MySQL会做**隐式的类型转换**，把它们转换为浮点数再做比较。隐式的类型转换，索引会失效。
+
 
 
 #### 2.2 查询条件包含or，可能导致索引失效
@@ -81,7 +83,10 @@ CREATE TABLE user (id int(11) NOT NULL AUTO_INCREMENT,userId varchar(32) NOT NUL
 
 like查询以%开头，索引失效
 
->explain select * from user where userId like '%123';
+```mysql
+explain select * from user where userId like '%123';
+```
+
 
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/01da281a8f528c6331ecd159be6f9461.png)
@@ -90,15 +95,20 @@ like查询以%开头，索引失效
 
 把%放后面，发现索引还是正常走的，如下：
 
->explain select * from user where userId like '123%';
+```mysql
+explain select * from user where userId like '123%';
+```
+
+![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/02b1ee0eb4c397bcc11951b767da2544.png)
+
 
 既然like查询以%开头，会导致索引失效。我们如何优化呢？
 
-使用覆盖索引
+* 使用覆盖索引
 
-把%放后面
+* 把%放后面
 
-2.4 查询条件不满足联合索引的最左匹配原则
+#### 2.4 查询条件不满足联合索引的最左匹配原则
 MySQl建立联合索引时，会遵循最左前缀匹配的原则，即最左优先。如果你建立一个（a,b,c）的联合索引，相当于建立了(a)、(a,b)、(a,b,c)三个索引。
 
 假设有以下表结构： 
@@ -111,7 +121,10 @@ CREATE TABLE user (id int(11) NOT NULL AUTO_INCREMENT,user_id varchar(32) NOT NU
 
 有一个联合索引idx_userid_name，我们执行这个SQL，查询条件是name，索引是无效：
 
->explain select * from user where name ='捡田螺的小男孩';
+```mysql
+explain select * from user where name ='捡田螺的小男孩';
+```
+
 
 
 因为查询条件列name不是联合索引idx_userid_name中的第一个列，索引不生效
@@ -138,7 +151,7 @@ CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT,`userId` varchar(32) N
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/070b965c07c22615b00c658cde3770db.png)
 
-一般这种情况怎么优化呢？可以把内置函数的逻辑转移到右边，如下：
+一般这种情况怎么优化呢？可以把**内置函数的逻辑转移到右边**，如下：
 
 >explain  select * from user where login_time = DATE_ADD('2022-05-22 00:00:00',INTERVAL -1 DAY);
 
@@ -162,7 +175,7 @@ CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT,`userId` varchar(32) N
 
 所以**不可以对索引列进行运算，可以在代码处理好，再传参进去。**
 
-2.7 索引字段上使用（！= 或者 < >），索引可能失效
+#### 2.7 索引字段上使用（！= 或者 < >），索引可能失效
 表结构：
 
 ```mysql
@@ -173,13 +186,14 @@ CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT,`userId` int(11) NOT N
 
 虽然age加了索引，但是使用了！= 或者< >，not in这些时，索引如同虚设。如下：
 
+![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/8a11264bbc81d50601f5cfc3aceba599.png)
 
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/b8d17c4d222201ea0da67f7bdefdde48.png)
 
 
 其实这个也是跟mySQL优化器有关，如果优化器觉得即使走了索引，还是需要扫描很多很多行的哈，它觉得不划算，不如直接不走索引。平时我们用！= 或者< >，not in的时候，留点心眼哈。
 
-2.8 索引字段上使用is null， is not null，索引可能失效
+#### 2.8 索引字段上使用is null， is not null，索引可能失效
 表结构:
 
 ```mysql
@@ -261,8 +275,10 @@ CREATE TABLE account (id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键Id',name
 
 你知道以下SQL，执行过程是怎样的嘛？
 
+```mysql
+select id,name,balance from account where create_time> '2020-09-19' limit 100000,10;
+```
 
->select id,name,balance from account where create_time> '2020-09-19' limit 100000,10;
 
 #### 这个SQL的执行流程：
 
@@ -340,15 +356,15 @@ B+树叶子存的是数据，内部节点存的是键值+指针。索引组织�
 
 分库分表可能导致的问题：
 
-事务问题
+* 事务问题
 
-跨库问题
+* 跨库问题
 
-排序问题
+* 排序问题
 
-分页问题
+* 分页问题
 
-分布式ID
+* 分布式ID
 
 因此，大家在评估是否分库分表前，先考虑下，是否可以把部分历史数据归档先，如果可以的话，先不要急着**分库分表**。如果真的要分库分表，综合考虑和评估方案。比如可以考虑垂直、水平分库分表。水平分库分表策略的话，**range范围、hash取模、range+hash取模混合**等等。
 
@@ -357,9 +373,9 @@ B+树叶子存的是数据，内部节点存的是键值+指针。索引组织�
 
 MySQL中，join的执行算法，分别是：Index Nested-Loop Join和Block Nested-Loop Join。
 
-Index Nested-Loop Join：这个join算法，跟我们写程序时的嵌套查询类似，并且可以用上**被驱动表的索引**。
+* Index Nested-Loop Join：这个join算法，跟我们写程序时的嵌套查询类似，并且可以用上**被驱动表的索引**。
 
-Block Nested-Loop Join：这种join算法，**被驱动表上没有可用的索引**,它会先把驱动表的数据读入线程内存join_buffer中，再扫描被驱动表，把被驱动表的每一行取出来，跟join_buffer中的数据做对比，满足join条件的，作为结果集的一部分返回。
+* Block Nested-Loop Join：这种join算法，**被驱动表上没有可用的索引**,它会先把驱动表的数据读入线程内存join_buffer中，再扫描被驱动表，把被驱动表的每一行取出来，跟join_buffer中的数据做对比，满足join条件的，作为结果集的一部分返回。
 
 join过多的问题：
 
@@ -479,8 +495,9 @@ order by排序，分为全字段排序和rowid排序。它是拿max_length_for_s
 rowid排序
 rowid排序，一般需要**回表去找满足条件的数据，所以效率会慢一点**。以下这个SQL，使用rowid排序，执行过程是这样：
 
-
->select name,age,city from staff where city = '深圳' order by age limit 10;
+```mysql
+select name,age,city from staff where city = '深圳' order by age limit 10;
+```
 
 1、MySQL 为对应的线程初始化sort_buffer，放入需要排序的age字段，以及主键id；
 
@@ -502,7 +519,10 @@ rowid排序，一般需要**回表去找满足条件的数据，所以效率会�
 全字段排序
 同样的SQL，如果是走全字段排序是这样的：
 
->select name,age,city from staff where city = '深圳' order by age limit 10;
+```mysql
+select name,age,city from staff where city = '深圳' order by age limit 10;
+```
+
 
 
 1、MySQL 为对应的线程初始化sort_buffer，放入需要查询的name、age、city字段；
@@ -534,14 +554,14 @@ sort_buffer的大小是由一个参数控制的：sort_buffer_size。
 >借助磁盘文件排序的话，**效率就更慢一点**。因为先把数据放入sort_buffer，当快要满时。会排一下序，然后把sort_buffer中的数据，放到临时磁盘文件，等到所有满足条件数据都查完排完，再用归并算法把磁盘的临时排好序的小文件，合并成一个有序的大文件。
 
 
-8.3 如何优化order by的文件排序
+#### 8.3 如何优化order by的文件排序
 order by使用**文件排序**，效率会低一点。我们怎么优化呢？
 
-因为数据是无序的，所以就需要排序。如果数据本身是有序的，那就不会再用到文件排序啦。而索引数据本身是有序的，我们通过建立索引来优化order by语句。
+* 因为数据是无序的，所以就需要排序。如果数据本身是有序的，那就不会再用到文件排序啦。而索引数据本身是有序的，我们通过建立索引来优化order by语句。
 
-我们还可以通过调整max_length_for_sort_data、sort_buffer_size等参数优化；
+* 我们还可以通过调整max_length_for_sort_data、sort_buffer_size等参数优化；
 
-9. 拿不到锁
+#### 9. 拿不到锁
    有时候，我们查询一条很简单的SQL，但是却等待很长的时间，不见结果返回。一般这种时候就是表被锁住了，或者要查询的某一行或者几行被锁住了。我们只能慢慢等待锁被释放。
 
 
@@ -564,8 +584,9 @@ CREATE TABLE `old_account` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键
 
 执行的SQL如下：
 
->delete from account where name in (select name from old_account);
-
+````mysql
+delete from account where name in (select name from old_account);
+````
 
 查看执行计划，发现不走索引：
 
@@ -599,10 +620,10 @@ where (`test2`.`account`.`name` = `test2`.`old_account`.`name`)
 ```
 可以发现，实际执行的时候，MySQL对select in子查询做了优化，把子查询改成join的方式，所以可以走索引。但是很遗憾，对于delete in子查询，MySQL却没有对它做这个优化。
 
-11、group by使用临时表
+#### 11、group by使用临时表
 group by一般用于分组统计，它表达的逻辑就是根据**一定的规则，进行分组**。日常开发中，我们使用得比较频繁。如果不注意，很容易产生慢SQL。
 
-11.1 group by的执行流程
+##### 11.1 group by的执行流程
 假设有表结构：
 
 ```mysql
@@ -620,15 +641,16 @@ explain select city ,count(*) as num from staff group by city;
 ![图片](https://raw.githubusercontent.com/royegit/notes/master/mysql/img/d4ddedeb8ccda07afe558589edf44574.png)
 
 
+* Extra 这个字段的Using temporary表示在执行分组的时候使用了**临时表**
 
-
-Extra 这个字段的Using temporary表示在执行分组的时候使用了**临时表**
-
-Extra 这个字段的Using filesort表示使用了**文件排序**
+* Extra 这个字段的Using filesort表示使用了**文件排序**
 
 group by是怎么使用到临时表和排序了呢？我们来看下这个SQL的执行流程
 
->select city ,count(*) as num from staff group by city;
+```mysql
+select city ,count(*) as num from staff group by city;
+```
+
 
 
 
@@ -653,42 +675,40 @@ group by是怎么使用到临时表和排序了呢？我们来看下这个SQL的
 
 如果是rowid排序，只是需要排序的字段放入sort buffer，然后多一次回表操作，再返回。
 
-11.2  group by可能会慢在哪里？
+#### 11.2  group by可能会慢在哪里？
 group by使用不当，很容易就会产生慢SQL 问题。因为它既用到临时表，又默认用到排序。有时候还可能用到磁盘临时表。
 
-如果执行过程中，会发现内存临时表大小到达了上限（控制这个上限的参数就是tmp_table_size），会把内存临时表转成磁盘临时表。
+* 如果执行过程中，会发现内存临时表大小到达了上限（控制这个上限的参数就是tmp_table_size），会把内存临时表转成磁盘临时表。
 
-如果数据量很大，很可能这个查询需要的磁盘临时表，就会占用大量的磁盘空间。
+* 如果数据量很大，很可能这个查询需要的磁盘临时表，就会占用大量的磁盘空间。
 
-11.3 如何优化group by呢？
+##### 11.3 如何优化group by呢？
 从哪些方向去优化呢？
 
-方向1：既然它默认会排序，我们不给它排是不是就行啦。
+* 方向1：既然它默认会排序，我们不给它排是不是就行啦。
 
-方向2：既然临时表是影响group by性能的X因素，我们是不是可以不用临时表？
+* 方向2：既然临时表是影响group by性能的X因素，我们是不是可以不用临时表？
 
 我们一起来想下，执行group by语句为什么需要临时表呢？group by的语义逻辑，就是统计不同的值出现的个数。如果这个这些值一开始就是有序的，我们是不是直接往下扫描统计就好了，就不用临时表来记录并统计结果啦?
 
 可以有这些优化方案：
 
-group by 后面的字段加索引
+* group by 后面的字段加索引
 
-order by null 不用排序
+* order by null 不用排序
 
-尽量只使用内存临时表
+* 尽量只使用内存临时表
 
-使用SQL_BIG_RESULT
+* 使用SQL_BIG_RESULT
 
-12. 系统硬件或网络资源
+#### 12. 系统硬件或网络资源
     如果数据库服务器内存、硬件资源，或者网络资源配置不是很好，就会慢一些哈。这时候可以升级配置。这就好比你的计算机有时候很卡，你可以加个内存条什么的一个道理。
 
-如果数据库压力本身很大，比如高并发场景下，大量请求到数据库来，数据库服务器CPU占用很高或者IO利用率很高，这种情况下所有语句的执行都有可能变慢的哈。
+* 如果数据库压力本身很大，比如高并发场景下，大量请求到数据库来，数据库服务器CPU占用很高或者IO利用率很高，这种情况下所有语句的执行都有可能变慢的哈。
 
-最后
-如果测试环境数据库的一些参数配置，和生产环境参数配置不一致的话，也容易产生慢SQL哈。之前见过一个慢SQL的生产案例，就是测试环境用了index merge，所以查看explain执行计划时，是可以走索引的，但是到了生产，却全表扫描，最后排查发现是生产环境配置把index merge关闭了。大家是否还遇到其他场景的慢SQL呢？如果有的话，欢迎评论区留言交流哈
+**最后**
+* 如果测试环境数据库的一些参数配置，和生产环境参数配置不一致的话，也容易产生慢SQL哈。之前见过一个慢SQL的生产案例，就是测试环境用了index merge，所以查看explain执行计划时，是可以走索引的，但是到了生产，却全表扫描，最后排查发现是生产环境配置把index merge关闭了。大家是否还遇到其他场景的慢SQL呢？如果有的话，欢迎评论区留言交流哈
 
-如果这篇文章对您有所帮助，或者有所启发的话，求一键三连：点赞、转发、在看，您的支持是我坚持写作最大的动力。
 
-参考与感谢
 
 
